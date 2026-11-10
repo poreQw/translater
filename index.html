@@ -68,9 +68,9 @@
       display: grid;
       width: 100%;
       min-width: 0;
-      grid-template-columns: repeat(3, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 14px;
-      overflow-x: auto;
+      overflow-x: visible;
     }
 
     main.is-text-display .result-block + .result-block {
@@ -663,81 +663,612 @@
       .language-pair { grid-template-columns: 1fr; gap: 12px; }
     }
 
+    :root {
+      color-scheme: light;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      color: #172033;
+      background: #eef2f8;
+      line-height: 1.6;
+      --accent: #3978f6;
+      --accent-deep: #245fd1;
+      --pink: #5b8df7;
+      --ink-muted: #758096;
+      --line: #e7ebf2;
+    }
+
+    body {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 100vh;
+      padding: clamp(16px, 4vw, 48px) 16px;
+      background:
+        radial-gradient(ellipse at 12% 0%, #e1eaff 0, transparent 38%),
+        radial-gradient(ellipse at 95% 100%, #e6ecf6 0, transparent 42%),
+        #eef2f8;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      width: min(100%, 1120px);
+      padding: clamp(20px, 4vw, 48px);
+      border: 1px solid rgb(255 255 255 / 85%);
+      border-radius: 24px;
+      background: rgb(255 255 255 / 94%);
+      box-shadow: 0 2px 8px rgb(31 45 70 / 3%), 0 24px 70px rgb(31 45 70 / 10%);
+      backdrop-filter: blur(20px);
+    }
+
+    main > * { min-width: 0; }
+    h1 { color: #172033; font-weight: 750; letter-spacing: -.045em; }
+    .eyebrow { color: var(--accent-deep); }
+    .intro, .notice { color: var(--ink-muted); }
+
+    .source-input-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 0 0 22px;
+      padding: clamp(16px, 3vw, 24px);
+      border: 1px solid #e9edf4;
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 4px 18px rgb(31 45 70 / 5%);
+    }
+
+    .source-input-top,
+    .source-input-actions,
+    .result-language-control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .source-input-top { justify-content: space-between; }
+    .source-language-control { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .source-input-card label,
+    .result-language-control label {
+      margin: 0 0 10px;
+      color: #566176;
+      font-size: .82rem;
+      font-weight: 650;
+    }
+
+    .source-language-control label,
+    .result-language-control label { flex: 0 0 auto; margin: 0; }
+    .source-language-control .lang-picker { width: min(250px, 58vw); }
+    .language-pair .lang-select-hidden,
+    .result-language-control .lang-select-hidden { display: none; }
+
+    .source-text-input {
+      width: 100%;
+      min-height: 112px;
+      resize: vertical;
+      padding: 16px 18px;
+      border: 0;
+      border-radius: 14px;
+      outline: none;
+      background: #f5f7fa;
+      color: #202b3d;
+      font: inherit;
+      font-size: 1.08rem;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+      transition: box-shadow .2s ease, background .2s ease;
+    }
+
+    .source-text-input:focus {
+      background: #fff;
+      box-shadow: 0 0 0 3px rgb(57 120 246 / 15%), inset 0 0 0 1px #b7cdfa;
+    }
+
+    .lang-picker { position: relative; min-width: 0; }
+
+    .lang-trigger {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-width: 0;
+      min-height: 52px;
+      padding: 7px 14px;
+      border: 0;
+      border-radius: 999px;
+      background: #fff;
+      color: #1d2738;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgb(31 45 70 / 5%), inset 0 0 0 1px #e9edf4;
+      transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    .lang-trigger:hover:not(:disabled),
+    .lang-trigger[aria-expanded="true"] {
+      background: #fff;
+      box-shadow: 0 0 0 3px rgb(57 120 246 / 12%), 0 5px 14px rgb(31 45 70 / 7%);
+    }
+
+    .lang-trigger:disabled { opacity: .58; cursor: not-allowed; }
+
+    .lang-avatar {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      flex: none;
+      place-items: center;
+      border-radius: 50%;
+      background: #edf3ff;
+      color: var(--accent-deep);
+      box-shadow: none;
+    }
+
+    .lang-code { font-size: .82rem; font-weight: 750; }
+    .country-flag { font-size: .82rem; font-weight: 750; line-height: 1; }
+    .lang-copy { display: grid; min-width: 0; gap: 1px; }
+    .lang-name { overflow: hidden; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+    .lang-country { display: none !important; }
+
+    .lang-caret {
+      width: 8px;
+      height: 8px;
+      flex: none;
+      margin-left: auto;
+      border-right: 1.8px solid #7d8798;
+      border-bottom: 1.8px solid #7d8798;
+      transform: rotate(45deg) translateY(-2px);
+      transition: transform .2s ease;
+    }
+
+    .lang-trigger[aria-expanded="true"] .lang-caret {
+      transform: rotate(225deg) translateY(-2px);
+    }
+
+    .lang-menu {
+      position: absolute;
+      z-index: 20;
+      top: calc(100% + 8px);
+      right: 0;
+      left: 0;
+      max-height: min(64vh, 360px);
+      padding: 6px;
+      margin: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      list-style: none;
+      border: 1px solid #e8edf5;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 14px 36px rgb(31 45 70 / 14%);
+    }
+
+    .lang-menu[hidden] { display: none; }
+    .lang-picker.is-up .lang-menu { top: auto; bottom: calc(100% + 8px); }
+
+    .lang-picker.is-open .lang-menu {
+      position: static;
+      max-height: min(38vh, 260px);
+      margin-top: 8px;
+      box-shadow: inset 0 0 0 1px #edf0f5;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .lang-option .lang-avatar { width: 28px; height: 28px; }
+    .lang-option:hover,
+    .lang-option.is-active,
+    .lang-option[aria-selected="true"] { background: #eff4ff; }
+    .lang-option[aria-selected="true"] .lang-name { color: var(--accent-deep); }
+    .lang-check { margin-left: auto; color: var(--accent); font-weight: 800; opacity: 0; }
+    .lang-option[aria-selected="true"] .lang-check { opacity: 1; }
+
+    .result-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 14px;
+    }
+
+    .result-toolbar h2 {
+      margin: 0;
+      color: #293448;
+      font-size: 1rem;
+    }
+
+    .target-count { color: var(--ink-muted); font-size: .86rem; }
+
+    .add-target-button,
+    .remove-target-button {
+      min-height: 40px;
+      padding: 8px 14px;
+      border: 1px solid #dfe7f3;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--accent-deep);
+      font: inherit;
+      font-size: .88rem;
+      font-weight: 650;
+      cursor: pointer;
+      transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    .add-target-button:hover:not(:disabled),
+    .remove-target-button:hover:not(:disabled) {
+      background: #edf3ff;
+      box-shadow: 0 4px 12px rgb(52 120 246 / 10%);
+      transform: translateY(-1px);
+    }
+
+    .add-target-button:disabled,
+    .remove-target-button:disabled { opacity: .48; cursor: not-allowed; }
+
+    .result {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      align-items: stretch;
+      gap: 16px;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .result-block,
+    .result-block + .result-block {
+      min-width: 0;
+      margin: 0;
+      padding: 18px;
+      border: 1px solid #e9edf4;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 4px 16px rgb(31 45 70 / 5%);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .result-block:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgb(31 45 70 / 8%);
+    }
+
+    .result-heading {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      min-width: 0;
+      min-height: 112px;
+    }
+    .result-heading-main { min-width: 0; }
+    .result-heading h2 { color: #293448; font-size: .9rem; font-weight: 700; }
+    .result-language-control { flex-direction: column; align-items: stretch; gap: 6px; margin-top: 12px; }
+    .result-language-control .lang-trigger { min-height: 46px; }
+    .result-language-control .lang-picker { width: 100%; }
+    .result-card-topline { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .result-card-topline h2 { min-width: 0; margin: 0; }
+
+    .lang-chip {
+      width: 30px;
+      height: 30px;
+      background: #edf3ff;
+      color: var(--accent-deep);
+      box-shadow: none;
+    }
+
+    .mic-device-control {
+      display: grid;
+      grid-template-columns: auto minmax(180px, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .mic-device-control label { margin: 0; }
+    .mic-device-control .speech-tip { grid-column: 1 / -1; margin: 0; text-align: left; }
+    .mic-device-control select {
+      width: 100%;
+      min-width: 0;
+      min-height: 42px;
+      padding: 8px 12px;
+      border: 1px solid #e1e7f0;
+      border-radius: 12px;
+      background: #f7f9fc;
+      color: #202b3d;
+      font: inherit;
+    }
+    .mic-device-control select:disabled { opacity: .65; }
+    .refresh-microphones-button {
+      min-height: 42px;
+      padding: 8px 12px;
+      border: 1px solid #dfe7f3;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--accent-deep);
+      font: inherit;
+      font-size: .82rem;
+      cursor: pointer;
+    }
+
+    .display-window-button {
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid #dfe7f3;
+      border-radius: 12px;
+      background: #f7f9fc;
+      color: var(--accent-deep);
+      font: inherit;
+      font-size: .82rem;
+      font-weight: 650;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .display-window-button:hover { background: #edf3ff; }
+
+    #presentation-display[hidden] { display: none; }
+    #presentation-display {
+      display: grid;
+      width: 100%;
+      min-height: 100vh;
+      align-content: center;
+      justify-items: center;
+      gap: 5vh;
+      padding: 6vw;
+      text-align: center;
+    }
+    .presentation-language {
+      margin: 0;
+      color: #9ebcff;
+      font-size: clamp(1.5rem, 3vw, 3rem);
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+    .presentation-translation {
+      width: min(100%, 1600px);
+      max-height: 78vh;
+      margin: 0;
+      overflow: auto;
+      color: #fff;
+      font-size: clamp(3rem, 9vw, 9rem);
+      font-weight: 700;
+      line-height: 1.28;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+    .presentation-translation.is-placeholder { color: #9aa8bd; }
+    body.is-presentation-display {
+      display: block;
+      min-width: 0;
+      min-height: 100vh;
+      padding: 0;
+      background: #080d17;
+      color: #fff;
+    }
+    body.is-presentation-display #app { display: none; }
+    body.is-presentation-display #presentation-display { display: grid; }
+
+    .recognized-text,
+    .translated-text {
+      min-height: 230px;
+      padding: 18px;
+      border: 0;
+      border-radius: 14px;
+      background: #f5f7fa;
+      color: #202b3d;
+      font-size: 1.12rem;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+      box-shadow: inset 0 1px 2px rgb(31 45 70 / 3%);
+    }
+
+    .recognized-text.is-placeholder,
+    .translated-text.is-placeholder { color: #8993a3; }
+    .panel-tools { display: flex; align-items: center; flex: 0 0 auto; }
+
+    .mic-button {
+      min-height: 58px;
+      border: 0;
+      border-radius: 16px;
+      background: linear-gradient(110deg, #3478f6, #5b8df7);
+      box-shadow: 0 8px 22px rgb(52 120 246 / 25%);
+      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+
+    .mic-button:hover:not(:disabled) {
+      filter: brightness(1.05);
+      box-shadow: 0 12px 28px rgb(52 120 246 / 32%);
+      transform: translateY(-2px);
+    }
+
+    .mic-button:active:not(:disabled) { transform: scale(.985); }
+
+    .source-input-actions { justify-content: flex-end; flex-wrap: wrap; }
+    .source-input-actions .mic-button,
+    .source-input-actions .translate-button { width: auto; min-width: 190px; margin: 0; padding: 0 22px; }
+
+    .translate-button {
+      min-height: 58px;
+      border: 0;
+      border-radius: 16px;
+      background: #172033;
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgb(23 32 51 / 15%);
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+
+    .translate-button:hover:not(:disabled) {
+      background: #263a5f;
+      box-shadow: 0 12px 24px rgb(23 32 51 / 22%);
+      transform: translateY(-2px);
+    }
+
+    .translate-button:disabled { opacity: .6; cursor: not-allowed; }
+
+    main.is-text-display > .source-input-card {
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 14px;
+      box-shadow: none;
+    }
+
+    main.is-text-display .source-input-top,
+    main.is-text-display .source-text-input,
+    main.is-text-display .translate-button { display: none; }
+
+    main.is-text-display .source-input-actions { justify-content: flex-end; }
+    main.is-text-display .source-input-actions .mic-button { min-height: 44px; }
+
+    .copy-button,
+    .install-button,
+    .theme-switch {
+      min-height: 40px;
+      border: 1px solid #e7ebf2;
+      border-radius: 12px;
+      background: #f7f9fc;
+      color: var(--accent-deep);
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+
+    .copy-button:hover:not(:disabled),
+    .install-button:hover,
+    .theme-switch:hover {
+      background: #edf3ff;
+      box-shadow: 0 4px 12px rgb(52 120 246 / 12%);
+      transform: translateY(-1px);
+    }
+
+    .status { line-height: 1.55; }
+    .speech-tip { margin-top: 0; line-height: 1.6; }
+
+    body[data-theme="night"] {
+      color-scheme: dark;
+      color: #eef2f8;
+      background: radial-gradient(ellipse at 10% 0%, #263349 0, transparent 40%), #151a24;
+    }
+
+    body[data-theme="night"] main { border-color: #313b4b; background: rgb(29 36 48 / 96%); }
+    body[data-theme="night"] .source-input-card { border-color: #354052; background: #222b39; }
+    body[data-theme="night"] .result-block,
+    body[data-theme="night"] .result-block + .result-block { border-color: #354052; background: #222b39; }
+    body[data-theme="night"] .result-toolbar h2 { color: #e4eaf3; }
+    body[data-theme="night"] .add-target-button,
+    body[data-theme="night"] .remove-target-button { border-color: #39465a; background: #202938; color: #bcd1ff; }
+    body[data-theme="night"] .lang-trigger { background: #19212d; color: #eef2f8; box-shadow: inset 0 0 0 1px #39465a; }
+    body[data-theme="night"] .lang-menu { border-color: #39465a; background: #202938; }
+    body[data-theme="night"] .lang-option:hover,
+    body[data-theme="night"] .lang-option.is-active,
+    body[data-theme="night"] .lang-option[aria-selected="true"] { background: #2c3b55; }
+    body[data-theme="night"] .recognized-text,
+    body[data-theme="night"] .translated-text,
+    body[data-theme="night"] .source-text-input { background: #19212d; color: #eef2f8; }
+    body[data-theme="night"] .result-heading h2,
+    body[data-theme="night"] .source-input-card label,
+    body[data-theme="night"] .result-language-control label { color: #e4eaf3; }
+    body[data-theme="night"] .source-text-input:focus { background: #1c2736; }
+    body[data-theme="night"] .translate-button { background: #e8eef8; color: #172033; }
+    body[data-theme="night"] .copy-button,
+    body[data-theme="night"] .install-button,
+    body[data-theme="night"] .theme-switch { border-color: #39465a; background: #202938; color: #bcd1ff; }
+
+    @media (max-width: 760px) {
+      body { padding: 12px; }
+      main:not(.is-text-display) {
+        width: 100%;
+        padding: 22px 16px;
+        border-radius: 20px;
+      }
+
+      .source-input-card,
+      .result-block,
+      .result-block + .result-block { padding: 15px; }
+      .result { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+      .translated-text { min-height: 150px; }
+      .source-input-top,
+      .source-language-control { align-items: flex-start; flex-direction: column; }
+      .source-language-control .lang-picker { width: 100%; }
+      .mic-device-control { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+      .source-input-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
+      .source-input-actions .mic-button,
+      .source-input-actions .translate-button { width: 100%; min-width: 0; min-height: 58px; }
+      .result-heading { min-height: 0; }
+
+      main.is-text-display > .result {
+        grid-template-columns: minmax(0, 1fr);
+        overflow: visible;
+      }
+
+      main.is-text-display .translated-text {
+        min-height: 38vh;
+        overflow-wrap: anywhere;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
   </style>
 </head>
 <body>
   <main id="app">
     <p class="eyebrow">✨ SAY IT · SHARE IT</p>
     <h1>말톡</h1>
-    <p class="intro">말하는 동안 인식된 문장과 B·C 화면의 번역 결과를 함께 확인할 수 있어요.</p>
+    <p class="intro">输入或说出内容，一次查看多种语言的翻译结果。</p>
 
-    <div class="language-pair">
-      <div>
-        <label for="source-language">말할 언어</label>
-        <select id="source-language">
-          <option value="ko" data-speech="ko-KR" selected>🇰🇷 한국어</option>
-          <option value="en" data-speech="en-US">🇺🇸 영어 · 미국</option>
-          <option value="ja" data-speech="ja-JP">🇯🇵 일본어 · 일본</option>
-          <option value="zh-CN" data-speech="zh-CN">🇨🇳 중국어(간체) · 중국</option>
-          <option value="es" data-speech="es-ES">🇪🇸 스페인어 · 스페인</option>
-          <option value="fr" data-speech="fr-FR">🇫🇷 프랑스어 · 프랑스</option>
-          <option value="de" data-speech="de-DE">🇩🇪 독일어 · 독일</option>
-          <option value="it" data-speech="it-IT">🇮🇹 이탈리아어 · 이탈리아</option>
-          <option value="pt" data-speech="pt-BR">🇧🇷 포르투갈어 · 브라질</option>
-          <option value="ru" data-speech="ru-RU">🇷🇺 러시아어 · 러시아</option>
-          <option value="vi" data-speech="vi-VN">🇻🇳 베트남어 · 베트남</option>
-          <option value="th" data-speech="th-TH">🇹🇭 태국어 · 태국</option>
-          <option value="id" data-speech="id-ID">🇮🇩 인도네시아어 · 인도네시아</option>
-          <option value="ar" data-speech="ar-SA">🇸🇦 아랍어 · 사우디아라비아</option>
-          <option value="hi" data-speech="hi-IN">🇮🇳 힌디어 · 인도</option>
-          <option value="tr" data-speech="tr-TR">🇹🇷 튀르키예어 · 튀르키예</option>
-        </select>
+    <section class="source-input-card" aria-label="原文输入">
+      <div class="source-input-top">
+        <div class="source-language-control">
+          <label for="source-language">输入语言</label>
+          <select id="source-language">
+            <option value="ko" data-speech="ko-KR" selected>🇰🇷 한국어</option>
+            <option value="en" data-speech="en-US">🇺🇸 영어 · 미국</option>
+            <option value="ja" data-speech="ja-JP">🇯🇵 일본어 · 일본</option>
+            <option value="zh-CN" data-speech="zh-CN">🇨🇳 중국어(간체) · 중국</option>
+            <option value="es" data-speech="es-ES">🇪🇸 스페인어 · 스페인</option>
+            <option value="fr" data-speech="fr-FR">🇫🇷 프랑스어 · 프랑스</option>
+            <option value="de" data-speech="de-DE">🇩🇪 독일어 · 독일</option>
+            <option value="it" data-speech="it-IT">🇮🇹 이탈리아어 · 이탈리아</option>
+            <option value="pt" data-speech="pt-BR">🇧🇷 포르투갈어 · 브라질</option>
+            <option value="ru" data-speech="ru-RU">🇷🇺 러시아어 · 러시아</option>
+            <option value="vi" data-speech="vi-VN">🇻🇳 베트남어 · 베트남</option>
+            <option value="th" data-speech="th-TH">🇹🇭 태국어 · 태국</option>
+            <option value="id" data-speech="id-ID">🇮🇩 인도네시아어 · 인도네시아</option>
+            <option value="ar" data-speech="ar-SA">🇸🇦 아랍어 · 사우디아라비아</option>
+            <option value="hi" data-speech="hi-IN">🇮🇳 힌디어 · 인도</option>
+            <option value="tr" data-speech="tr-TR">🇹🇷 튀르키예어 · 튀르키예</option>
+          </select>
+        </div>
       </div>
-      <div>
-        <label for="target-language-b">B 화면에 표시할 언어</label>
-        <select id="target-language-b">
-          <option value="ko">🇰🇷 한국어</option>
-          <option value="en" selected>🇺🇸 영어 · 미국</option>
-          <option value="ja">🇯🇵 일본어 · 일본</option>
-          <option value="zh-CN">🇨🇳 중국어(간체) · 중국</option>
-          <option value="es">🇪🇸 스페인어 · 스페인</option>
-          <option value="fr">🇫🇷 프랑스어 · 프랑스</option>
-          <option value="de">🇩🇪 독일어 · 독일</option>
-          <option value="it">🇮🇹 이탈리아어 · 이탈리아</option>
-          <option value="pt">🇧🇷 포르투갈어 · 브라질</option>
-          <option value="ru">🇷🇺 러시아어 · 러시아</option>
-          <option value="vi">🇻🇳 베트남어 · 베트남</option>
-          <option value="th">🇹🇭 태국어 · 태국</option>
-          <option value="id">🇮🇩 인도네시아어 · 인도네시아</option>
-          <option value="ar">🇸🇦 아랍어 · 사우디아라비아</option>
-          <option value="hi">🇮🇳 힌디어 · 인도</option>
-          <option value="tr">🇹🇷 튀르키예어 · 튀르키예</option>
+      <div class="mic-device-control">
+        <label for="mic-device-select">选择麦克风设备</label>
+        <select id="mic-device-select" aria-describedby="mic-device-help">
+          <option value="default">系统默认麦克风</option>
         </select>
+        <button class="refresh-microphones-button" id="refresh-microphones-button" type="button">查找设备</button>
+        <span class="speech-tip" id="mic-device-help">点击“查找设备”并授权麦克风后，可显示设备名称。</span>
       </div>
-      <div>
-        <label for="target-language-c">C 화면에 표시할 언어</label>
-        <select id="target-language-c">
-          <option value="ko">🇰🇷 한국어</option>
-          <option value="en">🇺🇸 영어 · 미국</option>
-          <option value="ja" selected>🇯🇵 일본어 · 일본</option>
-          <option value="zh-CN">🇨🇳 중국어(간체) · 중국</option>
-          <option value="es">🇪🇸 스페인어 · 스페인</option>
-          <option value="fr">🇫🇷 프랑스어 · 프랑스</option>
-          <option value="de">🇩🇪 독일어 · 독일</option>
-          <option value="it">🇮🇹 이탈리아어 · 이탈리아</option>
-          <option value="pt">🇧🇷 포르투갈어 · 브라질</option>
-          <option value="ru">🇷🇺 러시아어 · 러시아</option>
-          <option value="vi">🇻🇳 베트남어 · 베트남</option>
-          <option value="th">🇹🇭 태국어 · 태국</option>
-          <option value="id">🇮🇩 인도네시아어 · 인도네시아</option>
-          <option value="ar">🇸🇦 아랍어 · 사우디아라비아</option>
-          <option value="hi">🇮🇳 힌디어 · 인도</option>
-          <option value="tr">🇹🇷 튀르키예어 · 튀르키예</option>
-        </select>
+      <textarea class="source-text-input" id="source-text-input" maxlength="3000"
+        placeholder="在这里输入要翻译的内容，或使用语音输入…" aria-label="输入要翻译的文本"></textarea>
+      <div class="source-input-actions">
+        <button class="mic-button" id="mic-button" type="button">🎙️ 语音输入</button>
+        <button class="translate-button" id="translate-text-button" type="button">翻译全部语言</button>
       </div>
-    </div>
+    </section>
 
-    <button class="mic-button" id="mic-button" type="button">🎙️ 한국어로 말하기</button>
     <div class="theme-switcher">
       <button class="theme-switch" id="theme-switch" type="button" role="switch" aria-checked="false" aria-label="밤 화면">
         <span class="theme-track" aria-hidden="true"><span class="theme-knob">🌅</span></span>
@@ -746,84 +1277,62 @@
     </div>
     <button class="install-button" id="install-button" type="button" hidden>📲 휴대폰에 설치</button>
     <p class="install-help" id="install-help" hidden>휴대폰 설치: Android는 브라우저 메뉴에서 ‘앱 설치’를, iPhone은 Safari 공유 메뉴에서 ‘홈 화면에 추가’를 선택하세요.</p>
-    <p class="status" id="status" role="status" aria-live="polite">말하는 동안 인식 결과와 B·C 번역이 함께 표시됩니다.</p>
-    <p class="speech-tip">조용한 곳에서 선택한 언어로 말씀해 주세요. 글이 길어지면 글씨가 작아지고, 300자를 넘으면 오래된 앞부분부터 사라져 최근 300자만 보여요.</p>
+    <p class="status" id="status" role="status" aria-live="polite">输入文本或语音后，结果会显示在下方语言卡片中。</p>
+    <p class="speech-tip">可输入文本后点击翻译，也可选择输入语言并使用语音输入。</p>
 
-    <section class="result" aria-label="음성 인식과 번역 결과">
-      <div class="result-block">
-        <div class="result-heading">
-          <h2>내가 말한 문장</h2>
-          <label class="background-color-control">
-            <span class="visually-hidden">원문 배경색</span>
-            <input type="color" value="#ffffff" data-color-target="recognized-text" aria-label="원문 배경색 선택">
-          </label>
-        </div>
-        <p class="recognized-text is-placeholder" id="recognized-text">말씀하시면 여기에 글자가 바로 표시됩니다.</p>
+    <div class="result-toolbar">
+      <div>
+        <h2>目标语言</h2>
+        <span class="target-count" id="target-count"></span>
       </div>
-      <div class="result-block">
-        <div class="result-heading">
-          <h2 id="result-title-b">B 화면 번역 결과</h2>
-          <div class="panel-tools">
-            <label class="background-color-control">
-              <span class="visually-hidden">B 번역 배경색</span>
-              <input type="color" value="#ffffff" data-color-target="translated-text-b" aria-label="B 번역 배경색 선택">
-            </label>
-            <button class="copy-button" type="button" data-copy-target="translated-text-b" disabled>복사</button>
-          </div>
-        </div>
-        <p class="translated-text is-placeholder" id="translated-text-b">말씀하시면 B 화면에 번역 결과가 표시됩니다.</p>
-        <p class="translation-status" id="translation-status-b" role="status"></p>
-      </div>
-      <div class="result-block">
-        <div class="result-heading">
-          <h2 id="result-title-c">C 화면 번역 결과</h2>
-          <div class="panel-tools">
-            <label class="background-color-control">
-              <span class="visually-hidden">C 번역 배경색</span>
-              <input type="color" value="#ffffff" data-color-target="translated-text-c" aria-label="C 번역 배경색 선택">
-            </label>
-            <button class="copy-button" type="button" data-copy-target="translated-text-c" disabled>복사</button>
-          </div>
-        </div>
-        <p class="translated-text is-placeholder" id="translated-text-c">말씀하시면 C 화면에 번역 결과가 표시됩니다.</p>
-        <p class="translation-status" id="translation-status-c" role="status"></p>
-      </div>
-    </section>
-    <p class="notice">음성 인식과 번역을 위해 인터넷 연결이 필요합니다. 브라우저 및 번역 서비스가 음성 또는 입력 문장을 처리할 수 있습니다.</p>
+      <button class="add-target-button" id="add-target-button" type="button">＋ 添加语言</button>
+    </div>
+    <section class="result" id="translation-results" aria-label="翻译结果"></section>
+    <p class="notice">语音识别和翻译需要网络连接。浏览器和翻译服务可能会处理语音或输入文本。</p>
   </main>
+  <section id="presentation-display" hidden aria-live="polite">
+    <p class="presentation-language" id="presentation-language"></p>
+    <p class="presentation-translation is-placeholder" id="presentation-translation">等待翻译内容…</p>
+  </section>
 
-  <script>
+  <script type="module">
+    const Capacitor = window.Capacitor;
+    const useNativeSpeech = Capacitor?.getPlatform() === "android";
+    let NativeSpeechRecognition;
+    if (useNativeSpeech) {
+      ({ SpeechRecognition: NativeSpeechRecognition } = await import("@capacitor-community/speech-recognition"));
+    }
+
     const sourceLanguageSelect = document.querySelector("#source-language");
-    const targetLanguageSelects = [
-      document.querySelector("#target-language-b"),
-      document.querySelector("#target-language-c")
-    ];
+    const sourceTextInput = document.querySelector("#source-text-input");
+    const microphoneSelect = document.querySelector("#mic-device-select");
+    const microphoneHelp = document.querySelector("#mic-device-help");
+    const refreshMicrophonesButton = document.querySelector("#refresh-microphones-button");
+    const targetLanguageSelects = [];
     const app = document.querySelector("#app");
+    const presentationView = document.querySelector("#presentation-display");
+    const presentationLanguage = document.querySelector("#presentation-language");
+    const presentationTranslation = document.querySelector("#presentation-translation");
+    const presentationTargetId = new URLSearchParams(window.location.search).get("display");
+    const presentationStoragePrefix = "sayit-presentation:";
+    const presentationChannel = "sayit-presentation";
+    let presentationBus = null;
+    try {
+      if ("BroadcastChannel" in window) presentationBus = new BroadcastChannel(presentationChannel);
+    } catch (error) {
+      console.warn("BroadcastChannel is unavailable; using local storage for presentation sync.", error);
+    }
+    const resultsContainer = document.querySelector("#translation-results");
+    const addTargetButton = document.querySelector("#add-target-button");
+    const targetCount = document.querySelector("#target-count");
     const themeSwitch = document.querySelector("#theme-switch");
     const micButton = document.querySelector("#mic-button");
+    const textTranslateButton = document.querySelector("#translate-text-button");
     const statusText = document.querySelector("#status");
-    const recognizedText = document.querySelector("#recognized-text");
-    const translationOutputs = [
-      {
-        languageSelect: targetLanguageSelects[0],
-        heading: document.querySelector("#result-title-b"),
-        text: document.querySelector("#translated-text-b"),
-        status: document.querySelector("#translation-status-b"),
-        copyButton: document.querySelector('[data-copy-target="translated-text-b"]'),
-        latestAppliedRequestId: 0,
-        screenName: "B"
-      },
-      {
-        languageSelect: targetLanguageSelects[1],
-        heading: document.querySelector("#result-title-c"),
-        text: document.querySelector("#translated-text-c"),
-        status: document.querySelector("#translation-status-c"),
-        copyButton: document.querySelector('[data-copy-target="translated-text-c"]'),
-        latestAppliedRequestId: 0,
-        screenName: "C"
-      }
-    ];
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognizedText = sourceTextInput;
+    const translationOutputs = [];
+    const BrowserSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let activeMicrophoneStream;
 
     const MIN_RESTART_DELAY = 150;
     const MAX_RESTART_DELAY = 1200;
@@ -849,7 +1358,8 @@
     let pendingLiveTranscript = "";
     let lastLiveTranscript = "";
     let lastLiveTranslationAt = 0;
-    let translationCooldownUntil = 0;
+    let myMemoryUnavailableUntil = 0;
+    let googleFallbackUnavailableUntil = 0;
     const translationCache = new Map();
     const pendingTranslationRequests = new Map();
 
@@ -875,16 +1385,16 @@
       applyTheme(document.body.dataset.theme || "morning");
     }
 
-    document.querySelectorAll("[data-color-target]").forEach((picker) => {
-      picker.addEventListener("input", () => {
-        const textBox = document.getElementById(picker.dataset.colorTarget);
-        if (!textBox) return;
-        const color = picker.value;
-        const channels = color.slice(1).match(/.{2}/g).map((channel) => parseInt(channel, 16));
-        const luminance = (0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]) / 255;
-        textBox.style.backgroundColor = color;
-        textBox.style.color = luminance > 0.55 ? "#251c3b" : "#ffffff";
-      });
+    document.addEventListener("input", (event) => {
+      if (!(event.target instanceof HTMLInputElement) || !event.target.matches("[data-color-target]")) return;
+      const picker = event.target;
+      const textBox = document.getElementById(picker.dataset.colorTarget);
+      if (!textBox) return;
+      const color = picker.value;
+      const channels = color.slice(1).match(/.{2}/g).map((channel) => parseInt(channel, 16));
+      const luminance = (0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]) / 255;
+      textBox.style.backgroundColor = color;
+      textBox.style.color = luminance > 0.55 ? "#251c3b" : "#ffffff";
     });
 
     const MAX_VISIBLE_CHARACTERS = 300;
@@ -913,28 +1423,325 @@
       output.copyButton.disabled = !text;
       output.status.textContent = "";
       output.status.dataset.kind = "";
+      publishOutput(output);
     }
 
     function setOutputStatus(output, message, kind = "") {
       if (output.status.textContent !== message) output.status.textContent = message;
       if (output.status.dataset.kind !== kind) output.status.dataset.kind = kind;
+      publishOutput(output);
     }
 
+    function renderPresentation(payload) {
+      if (!payload || payload.id !== presentationTargetId) return;
+      presentationLanguage.textContent = payload.languageName;
+      presentationTranslation.textContent = payload.removed ? "此语言卡片已关闭" : payload.text;
+      presentationTranslation.classList.toggle(
+        "is-placeholder",
+        Boolean(payload.removed || payload.placeholder)
+      );
+      presentationTranslation.lang = payload.language || "";
+      presentationTranslation.dir = payload.language === "ar" ? "rtl" : "auto";
+    }
+
+    function publishOutput(output, removed = false) {
+      if (!output?.id) return;
+      const payload = {
+        id: output.id,
+        language: output.languageSelect.value,
+        languageName: getLanguageName(output.languageSelect),
+        text: output.text.textContent,
+        placeholder: output.text.classList.contains("is-placeholder"),
+        removed
+      };
+      try {
+        localStorage.setItem(presentationStoragePrefix + output.id, JSON.stringify(payload));
+      } catch {
+        if (!presentationBus) {
+          setStatus("无法保存投屏内容，请允许浏览器使用本地存储。", "error");
+        }
+      }
+      presentationBus?.postMessage(payload);
+    }
+
+    function openPresentationWindow(output) {
+      publishOutput(output);
+      const url = new URL(window.location.href);
+      url.searchParams.set("display", output.id);
+      const displayWindow = window.open(url.href, `translation-${output.id}`);
+      if (!displayWindow || displayWindow.closed) {
+        setStatus("投屏窗口未能打开，请允许此网站弹出窗口。", "error");
+      }
+    }
+
+    async function refreshMicrophoneDevices(requestPermission = false) {
+      if (useNativeSpeech) {
+        microphoneSelect.disabled = true;
+        refreshMicrophonesButton.disabled = true;
+        microphoneHelp.textContent = "系统语音识别使用设备默认麦克风；当前原生识别插件不支持选择输入设备。";
+        return;
+      }
+      if (!navigator.mediaDevices?.enumerateDevices) {
+        microphoneSelect.disabled = true;
+        refreshMicrophonesButton.disabled = true;
+        microphoneHelp.textContent = "此浏览器不支持麦克风设备枚举，请使用新版 Chrome 或 Edge。";
+        return;
+      }
+
+      if (requestPermission) {
+        if (!navigator.mediaDevices.getUserMedia) {
+          throw new Error("此浏览器不支持麦克风访问。");
+        }
+        const permissionStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        permissionStream.getTracks().forEach((track) => track.stop());
+      }
+
+      const savedDeviceId = localStorage.getItem("sayit-microphone-device");
+      const selectedDeviceId = microphoneSelect.value !== "default"
+        ? microphoneSelect.value
+        : savedDeviceId || "default";
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const microphoneDevices = devices.filter((device) => device.kind === "audioinput");
+      microphoneSelect.replaceChildren(new Option("系统默认麦克风", "default"));
+      microphoneDevices.forEach((device, index) => {
+        if (!device.deviceId || device.deviceId === "default") return;
+        const label = device.label || `麦克风 ${index + 1}`;
+        microphoneSelect.add(new Option(label, device.deviceId));
+      });
+      microphoneSelect.value = Array.from(microphoneSelect.options)
+        .some((option) => option.value === selectedDeviceId)
+        ? selectedDeviceId
+        : "default";
+      microphoneSelect.disabled = sessionOpen || microphoneDevices.length === 0;
+      refreshMicrophonesButton.disabled = sessionOpen;
+      microphoneHelp.textContent = microphoneDevices.some((device) => device.label)
+        ? "选择需要使用的外接麦克风；浏览器须支持将音轨交给语音识别。"
+        : "点击“查找设备”并授权麦克风后，可显示设备名称。";
+    }
+
+    presentationBus?.addEventListener("message", (event) => {
+      renderPresentation(event.data);
+    });
+    window.addEventListener("storage", (event) => {
+      if (!event.key?.startsWith(presentationStoragePrefix) || !event.newValue) return;
+      try {
+        renderPresentation(JSON.parse(event.newValue));
+      } catch (error) {
+        console.error("Could not read the shared presentation update.", error);
+      }
+    });
+    if (presentationTargetId) {
+      document.body.classList.add("is-presentation-display");
+      presentationView.hidden = false;
+      try {
+        const savedPresentation = localStorage.getItem(presentationStoragePrefix + presentationTargetId);
+        if (savedPresentation) renderPresentation(JSON.parse(savedPresentation));
+      } catch (error) {
+        console.error("Could not load the saved presentation.", error);
+      }
+    }
+    window.addEventListener("pagehide", () => {
+      releaseMicrophoneStream();
+      presentationBus?.close();
+    });
+    void refreshMicrophoneDevices().catch((error) => {
+      microphoneHelp.textContent = error instanceof Error ? error.message : "无法读取麦克风设备。";
+    });
+    refreshMicrophonesButton.addEventListener("click", async () => {
+      try {
+        await refreshMicrophoneDevices(true);
+      } catch (error) {
+        setStatus(error instanceof Error ? error.message : "无法访问麦克风设备。", "error");
+      }
+    });
+    microphoneSelect.addEventListener("change", () => {
+      try {
+        localStorage.setItem("sayit-microphone-device", microphoneSelect.value);
+      } catch (error) {
+        setStatus(error instanceof Error ? error.message : "无法保存麦克风设置。", "error");
+      }
+    });
+    navigator.mediaDevices?.addEventListener?.("devicechange", () => {
+      void refreshMicrophoneDevices().catch((error) => {
+        microphoneHelp.textContent = error instanceof Error ? error.message : "无法刷新麦克风设备列表。";
+      });
+    });
+
+    const DISPLAY_LANGUAGE_NAMES = {
+      ko: "韩语",
+      en: "英语",
+      ja: "日语",
+      "zh-CN": "简体中文",
+      es: "西班牙语",
+      fr: "法语",
+      de: "德语",
+      it: "意大利语",
+      pt: "葡萄牙语",
+      ru: "俄语",
+      vi: "越南语",
+      th: "泰语",
+      id: "印度尼西亚语",
+      ar: "阿拉伯语",
+      hi: "印地语",
+      tr: "土耳其语"
+    };
+
     function getLanguageName(select) {
-      return select.selectedOptions[0].textContent.trim().split(" · ")[0];
+      return DISPLAY_LANGUAGE_NAMES[select.value] || select.selectedOptions[0].textContent.trim();
     }
 
     function updateOutputHeadings() {
       translationOutputs.forEach((output) => {
-        output.heading.textContent = `${output.screenName} 화면 · ${getLanguageName(output.languageSelect)} 번역`;
+        output.heading.textContent = `${output.screenName} · ${getLanguageName(output.languageSelect)} 翻译`;
+        publishOutput(output);
       });
     }
+
+    function updateTargetControls() {
+      targetCount.textContent = `当前 ${translationOutputs.length} 个目标语言`;
+      const selectedLanguages = new Set(targetLanguageSelects.map((select) => select.value));
+      const hasAvailableLanguage = Array.from(sourceLanguageSelect.options)
+        .some((option) => option.value !== sourceLanguageSelect.value && !selectedLanguages.has(option.value));
+      addTargetButton.disabled = !hasAvailableLanguage;
+      translationOutputs.forEach((output, index) => {
+        output.screenName = `屏幕 ${index + 1}`;
+        output.removeButton.disabled = translationOutputs.length === 1;
+      });
+      updateOutputHeadings();
+    }
+
+    let targetCardSequence = 0;
+
+    function addTargetOutput(language) {
+      const uniqueId = globalThis.crypto?.randomUUID?.()
+        || `${Date.now()}-${++targetCardSequence}-${Math.random().toString(36).slice(2)}`;
+      const cardId = `target-${uniqueId}`;
+      const resultBlock = document.createElement("article");
+      resultBlock.className = "result-block";
+      const heading = document.createElement("div");
+      heading.className = "result-heading";
+      const topLine = document.createElement("div");
+      topLine.className = "result-card-topline";
+      const title = document.createElement("h2");
+      const removeButton = document.createElement("button");
+      removeButton.className = "remove-target-button";
+      removeButton.type = "button";
+      removeButton.textContent = "删除";
+      removeButton.setAttribute("aria-label", "删除此目标语言");
+      topLine.append(title, removeButton);
+
+      const languageControl = document.createElement("div");
+      languageControl.className = "result-language-control";
+      const languageLabel = document.createElement("label");
+      const languageSelect = document.createElement("select");
+      languageSelect.id = `target-language-${cardId}`;
+      languageLabel.htmlFor = languageSelect.id;
+      languageLabel.textContent = "目标语言";
+      Array.from(sourceLanguageSelect.options).forEach((option) => {
+        languageSelect.appendChild(option.cloneNode(true));
+      });
+      languageSelect.value = language;
+
+      const panelTools = document.createElement("div");
+      panelTools.className = "panel-tools";
+      const colorLabel = document.createElement("label");
+      colorLabel.className = "background-color-control";
+      const colorInput = document.createElement("input");
+      colorInput.type = "color";
+      colorInput.value = "#ffffff";
+      colorInput.dataset.colorTarget = `translated-text-${cardId}`;
+      colorInput.setAttribute("aria-label", "翻译结果背景色");
+      colorLabel.appendChild(colorInput);
+      const copyButton = document.createElement("button");
+      copyButton.className = "copy-button";
+      copyButton.type = "button";
+      copyButton.textContent = "复制";
+      copyButton.disabled = true;
+      const displayButton = document.createElement("button");
+      displayButton.className = "display-window-button";
+      displayButton.type = "button";
+      displayButton.textContent = "投屏窗口";
+      panelTools.append(colorLabel, copyButton, displayButton);
+
+      const translatedText = document.createElement("p");
+      translatedText.className = "translated-text is-placeholder";
+      translatedText.id = `translated-text-${cardId}`;
+      translatedText.textContent = "翻译结果将在此显示。";
+      const translationStatus = document.createElement("p");
+      translationStatus.className = "translation-status";
+      translationStatus.setAttribute("role", "status");
+      languageControl.append(languageLabel, languageSelect, panelTools);
+      heading.append(topLine, languageControl);
+      resultBlock.append(heading, translatedText, translationStatus);
+      resultsContainer.appendChild(resultBlock);
+
+      const output = {
+        id: cardId,
+        languageSelect,
+        heading: title,
+        text: translatedText,
+        status: translationStatus,
+        copyButton,
+        removeButton,
+        latestAppliedRequestId: translationRequestId,
+        screenName: ""
+      };
+      targetLanguageSelects.push(languageSelect);
+      translationOutputs.push(output);
+      window.initializeLanguageControl(languageSelect, topLine);
+      languageSelect.addEventListener("change", () => {
+        translationRequestId += 1;
+        translationOutputs.forEach((item) => {
+          item.latestAppliedRequestId = translationRequestId;
+        });
+        updateTargetControls();
+      });
+      removeButton.addEventListener("click", () => {
+        if (translationOutputs.length === 1) return;
+        const outputIndex = translationOutputs.indexOf(output);
+        publishOutput(output, true);
+        translationOutputs.splice(outputIndex, 1);
+        targetLanguageSelects.splice(outputIndex, 1);
+        resultBlock.remove();
+        translationRequestId += 1;
+        translationOutputs.forEach((item) => {
+          item.latestAppliedRequestId = translationRequestId;
+        });
+        updateTargetControls();
+      });
+      copyButton.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(output.copyText || output.text.textContent);
+          setStatus(`${output.screenName} 翻译已复制。`, "success");
+        } catch {
+          setStatus("无法复制，请检查浏览器的剪贴板权限。", "error");
+        }
+      });
+      displayButton.addEventListener("click", () => openPresentationWindow(output));
+      updateTargetControls();
+      publishOutput(output);
+      return output;
+    }
+
+    addTargetButton.addEventListener("click", () => {
+      const selectedLanguages = new Set(targetLanguageSelects.map((select) => select.value));
+      const nextLanguage = Array.from(sourceLanguageSelect.options)
+        .map((option) => option.value)
+        .find((value) => value !== sourceLanguageSelect.value && !selectedLanguages.has(value));
+      if (!nextLanguage) return;
+      addTargetOutput(nextLanguage);
+      translationRequestId += 1;
+      translationOutputs.forEach((output) => {
+        output.latestAppliedRequestId = translationRequestId;
+      });
+    });
+
+    ["en", "ja", "fr"].forEach((language) => addTargetOutput(language));
 
     function showRecognizedText(text) {
       const hasText = Boolean(text.trim());
       const visibleText = limitVisibleText(text);
-      const displayedText = hasText ? visibleText : "말씀하시면 여기에 글자가 바로 표시됩니다.";
-      recognizedText.textContent = displayedText;
+      recognizedText.value = hasText ? visibleText : "";
       recognizedText.classList.toggle("is-placeholder", !hasText);
       updateTextSize(recognizedText, hasText ? visibleText : "");
       recognizedText.lang = sourceLanguageSelect.selectedOptions[0].dataset.speech;
@@ -989,24 +1796,75 @@
     }
 
     async function requestTranslation(text, sourceLanguage, targetLanguage) {
-      const params = new URLSearchParams({
-        q: text,
-        langpair: `${sourceLanguage}|${targetLanguage}`
-      });
-      const response = await fetch(`https://api.mymemory.translated.net/get?${params}`);
-      if (!response.ok) {
-        throw new Error(`번역 서비스에 연결하지 못했습니다. (HTTP ${response.status})`);
+      if (window.desktopAPI?.translate) {
+        return window.desktopAPI.translate({ text, sourceLanguage, targetLanguage });
       }
 
-      const result = await response.json();
-      if (result.responseStatus === 429 || /MYMEMORY WARNING/i.test(result.responseDetails ?? "")) {
-        translationCooldownUntil = Date.now() + RATE_LIMIT_COOLDOWN;
-        throw new Error(RATE_LIMIT_MESSAGE);
+      let myMemoryError;
+      if (Date.now() >= myMemoryUnavailableUntil) {
+        try {
+          const params = new URLSearchParams({
+            q: text,
+            langpair: `${sourceLanguage}|${targetLanguage}`
+          });
+          const response = await fetch(`https://api.mymemory.translated.net/get?${params}`, {
+            signal: AbortSignal.timeout(8000)
+          });
+          const result = await response.json();
+          if (response.status === 429 || result.responseStatus === 429
+            || /MYMEMORY WARNING/i.test(result.responseDetails ?? "")) {
+            const retryAfter = Number(response.headers.get("Retry-After"));
+            myMemoryUnavailableUntil = Date.now()
+              + (retryAfter > 0 ? retryAfter * 1000 : RATE_LIMIT_COOLDOWN);
+            throw new Error(RATE_LIMIT_MESSAGE);
+          }
+          if (!response.ok) {
+            throw new Error(`MyMemory HTTP ${response.status}`);
+          }
+          if (result.responseStatus !== 200 || !result.responseData?.translatedText) {
+            throw new Error(result.responseDetails || "MyMemory returned an empty translation.");
+          }
+          return result.responseData.translatedText;
+        } catch (error) {
+          myMemoryError = error;
+        }
+      } else {
+        myMemoryError = new Error("MyMemory is temporarily rate-limited.");
       }
-      if (result.responseStatus !== 200 || !result.responseData?.translatedText) {
-        throw new Error(result.responseDetails || "번역 결과를 받지 못했습니다. 잠시 후 다시 시도해 주세요.");
+
+      if (Date.now() >= googleFallbackUnavailableUntil) {
+        try {
+          const params = new URLSearchParams({
+            client: "gtx",
+            sl: sourceLanguage,
+            tl: targetLanguage,
+            dt: "t",
+            q: text
+          });
+          const response = await fetch(
+            `https://translate.googleapis.com/translate_a/single?${params}`,
+            { signal: AbortSignal.timeout(8000) }
+          );
+          if (!response.ok) throw new Error(`Google Translate HTTP ${response.status}`);
+          const result = await response.json();
+          const translatedText = Array.isArray(result?.[0])
+            ? result[0].map((segment) => segment?.[0] || "").join("")
+            : "";
+          if (!translatedText) throw new Error("Google Translate returned an empty translation.");
+          return translatedText;
+        } catch (error) {
+          googleFallbackUnavailableUntil = Date.now() + 30 * 1000;
+          throw new Error(
+            `MyMemory failed: ${myMemoryError instanceof Error ? myMemoryError.message : "unknown error"}; `
+            + `browser fallback failed: ${error instanceof Error ? error.message : "unknown error"}`
+          );
+        }
       }
-      return result.responseData.translatedText;
+
+      throw new Error(
+        `MyMemory failed: ${myMemoryError instanceof Error ? myMemoryError.message : "unknown error"}; `
+        + "Google Translate browser fallback is temporarily unavailable."
+      );
     }
 
     function translateChunk(text, sourceLanguage, targetLanguage) {
@@ -1016,8 +1874,6 @@
 
       const pending = pendingTranslationRequests.get(cacheKey);
       if (pending) return pending;
-
-      if (Date.now() < translationCooldownUntil) return Promise.reject(new Error(RATE_LIMIT_MESSAGE));
 
       const request = requestTranslation(text, sourceLanguage, targetLanguage)
         .then((translatedText) => {
@@ -1031,14 +1887,20 @@
 
     async function translate(text, sourceLanguage, targetLanguage) {
       const chunks = splitIntoChunks(text);
-      const translations = await Promise.all(
-        chunks.map((chunk) => translateChunk(chunk.trim(), sourceLanguage, targetLanguage))
-      );
+      const translations = [];
+      for (const [index, chunk] of chunks.entries()) {
+        if (index > 0) await new Promise((resolve) => window.setTimeout(resolve, 300));
+        translations.push(await translateChunk(chunk.trim(), sourceLanguage, targetLanguage));
+      }
       return translations.join(" ");
     }
 
     function setLanguageControlsDisabled(disabled) {
       sourceLanguageSelect.disabled = disabled;
+      sourceTextInput.disabled = disabled;
+      textTranslateButton.disabled = disabled;
+      microphoneSelect.disabled = disabled || useNativeSpeech || !navigator.mediaDevices?.enumerateDevices;
+      refreshMicrophonesButton.disabled = disabled || useNativeSpeech || !navigator.mediaDevices?.enumerateDevices;
       targetLanguageSelects.forEach((select) => {
         select.disabled = disabled;
       });
@@ -1046,7 +1908,7 @@
 
     function updateMicLabel() {
       const languageName = getLanguageName(sourceLanguageSelect);
-      micButton.textContent = `🎙️ ${languageName}로 말하기`;
+      micButton.textContent = `🎙️ ${languageName}语音输入`;
     }
 
     function resetMicButton() {
@@ -1057,6 +1919,11 @@
 
     function setTextDisplayMode(enabled) {
       app.classList.toggle("is-text-display", enabled);
+    }
+
+    function releaseMicrophoneStream() {
+      activeMicrophoneStream?.getTracks().forEach((track) => track.stop());
+      activeMicrophoneStream = undefined;
     }
 
     function finishListening() {
@@ -1084,12 +1951,33 @@
       }
     }
 
-    function startRecognition() {
+    async function startRecognition() {
       if (!shouldListen || recognitionActive || recognitionStarting) return;
       recognitionStarting = true;
       try {
-        recognition.start();
+        if (microphoneSelect.value === "default") {
+          recognition.start();
+          return;
+        }
+        if (!navigator.mediaDevices?.getUserMedia) {
+          throw new Error("此浏览器不支持选择麦克风设备。");
+        }
+        activeMicrophoneStream = await navigator.mediaDevices.getUserMedia({
+          audio: { deviceId: { exact: microphoneSelect.value } }
+        });
+        const microphoneTrack = activeMicrophoneStream.getAudioTracks()[0];
+        if (!microphoneTrack) throw new Error("所选麦克风没有可用的音频输入。");
+        void refreshMicrophoneDevices().catch((error) => {
+          microphoneHelp.textContent = error instanceof Error ? error.message : "无法刷新麦克风设备列表。";
+        });
+        if (!shouldListen) {
+          releaseMicrophoneStream();
+          recognitionStarting = false;
+          return;
+        }
+        recognition.start(microphoneTrack);
       } catch (error) {
+        releaseMicrophoneStream();
         recognitionStarting = false;
         if (shouldListen && error instanceof DOMException && error.name === "InvalidStateError") {
           restartDelay = Math.min(restartDelay * 2, MAX_RESTART_DELAY);
@@ -1102,7 +1990,13 @@
         setTextDisplayMode(false);
         setLanguageControlsDisabled(false);
         resetMicButton();
-        setStatus(error instanceof Error ? error.message : "마이크를 시작하지 못했습니다.", "error");
+        const selectedMicUnsupported = microphoneSelect.value !== "default"
+          && (error instanceof TypeError
+            || error instanceof DOMException && error.name === "NotSupportedError");
+        const message = selectedMicUnsupported
+          ? "当前浏览器不支持将所选麦克风音轨接入语音识别，请使用新版 Chrome 或 Edge。"
+          : error instanceof Error ? error.message : "麦克风或语音识别启动失败。";
+        setStatus(message, "error");
       }
     }
 
@@ -1117,6 +2011,14 @@
       } catch (error) {
         if (requestId < output.latestAppliedRequestId) return false;
         output.latestAppliedRequestId = requestId;
+        const failureMessage = "该语言翻译失败，请重试";
+        output.text.textContent = failureMessage;
+        output.text.classList.remove("is-placeholder");
+        updateTextSize(output.text, failureMessage);
+        output.text.lang = targetLanguage;
+        output.text.dir = targetLanguage === "ar" ? "rtl" : "auto";
+        output.copyText = "";
+        output.copyButton.disabled = true;
         setOutputStatus(
           output,
           error instanceof Error ? error.message : "번역 중 오류가 발생했습니다.",
@@ -1126,14 +2028,26 @@
       }
     }
 
+    async function translateOutputs(text, sourceLanguage, targetLanguages, requestId) {
+      let previousRequest = Promise.resolve();
+      const requests = translationOutputs.map((output, index) => {
+        const request = previousRequest.then(async () => {
+          if (index > 0) await new Promise((resolve) => window.setTimeout(resolve, 300));
+          return translateForOutput(text, sourceLanguage, targetLanguages[index], output, requestId);
+        });
+        previousRequest = request.then(() => undefined, () => undefined);
+        return request;
+      });
+      const results = await Promise.allSettled(requests);
+      return results.map((result) => result.status === "fulfilled" && result.value);
+    }
+
     function scheduleLiveTranslation(text) {
       const spokenText = text.trim();
       if (!spokenText || !sessionOpen) return;
 
       pendingLiveTranscript = spokenText;
       if (translationTimer) return;
-      if (Date.now() < translationCooldownUntil) return;
-
       const delay = lastLiveTranslationAt
         ? Math.max(0, LIVE_TRANSLATION_INTERVAL - (Date.now() - lastLiveTranslationAt))
         : 350;
@@ -1147,11 +2061,7 @@
         const requestId = ++translationRequestId;
         const sourceLanguage = sourceLanguageSelect.value;
         const targetLanguages = targetLanguageSelects.map((select) => select.value);
-        void Promise.all(
-          translationOutputs.map((output, index) =>
-            translateForOutput(transcript, sourceLanguage, targetLanguages[index], output, requestId)
-          )
-        );
+        void translateOutputs(transcript, sourceLanguage, targetLanguages, requestId);
       }, delay);
 
       const waitingMessage = "말씀을 듣고 있어요. 곧 번역됩니다.";
@@ -1171,22 +2081,19 @@
       translationTimer = undefined;
       const requestId = ++translationRequestId;
       setStatus("긴 문장을 모두 번역하고 있어요...");
-      const results = await Promise.all(
-        translationOutputs.map((output, index) => {
-          return translateForOutput(spokenText, sourceLanguage, targetLanguages[index], output, requestId);
-        })
-      );
+      const results = await translateOutputs(spokenText, sourceLanguage, targetLanguages, requestId);
+      if (requestId !== translationRequestId) return;
       setStatus(
-        results.every(Boolean) ? "B와 C 화면의 번역이 완료됐어요." : "일부 번역에 실패했어요. 각 화면의 안내를 확인해 주세요.",
+        results.every(Boolean) ? "所有目标语言翻译已完成。" : "部分翻译失败，请查看对应语言卡片。",
         results.every(Boolean) ? "success" : "error"
       );
     }
 
-    if (!SpeechRecognition) {
+    if (!useNativeSpeech && !BrowserSpeechRecognition) {
       micButton.disabled = true;
       setStatus("이 브라우저는 음성 인식을 지원하지 않아요. Chrome 또는 Edge에서 열어 주세요.", "error");
-    } else {
-      recognition = new SpeechRecognition();
+    } else if (!useNativeSpeech) {
+      recognition = new BrowserSpeechRecognition();
       recognition.interimResults = true;
       recognition.continuous = true;
       recognition.maxAlternatives = 5;
@@ -1201,7 +2108,7 @@
         }
         micButton.classList.add("is-listening");
         micButton.textContent = "🔴 듣는 중 · 끝내려면 누르기";
-        setStatus("말씀하는 동안 B·C 화면에 번역 결과도 함께 표시돼요. 끝나면 마이크 버튼을 누르세요.");
+        setStatus("正在收听；结束后，结果会显示在所有目标语言卡片中。");
       };
 
       recognition.onresult = (event) => {
@@ -1248,6 +2155,7 @@
       recognition.onend = () => {
         recognitionActive = false;
         recognitionStarting = false;
+        releaseMicrophoneStream();
         if (shouldListen) {
           if (Date.now() - recognitionStartedAt > 1500) {
             restartDelay = MIN_RESTART_DELAY;
@@ -1266,31 +2174,96 @@
       };
     }
 
+    async function startNativeRecognition() {
+      try {
+        const permission = await NativeSpeechRecognition.requestPermissions();
+        if (permission.speechRecognition !== "granted") {
+          throw new Error("휴대폰 설정에서 이 앱의 마이크 권한을 허용해 주세요.");
+        }
+
+        const { available } = await NativeSpeechRecognition.available();
+        if (!available) {
+          throw new Error("휴대폰에서 사용할 수 있는 시스템 음성 인식 서비스를 찾지 못했어요.");
+        }
+
+        const result = await NativeSpeechRecognition.start({
+          language: sourceLanguageSelect.selectedOptions[0].dataset.speech,
+          maxResults: 1,
+          partialResults: false,
+          popup: true,
+          prompt: "말씀해 주세요"
+        });
+
+        transcriptParts = result.matches?.[0] ? [result.matches[0]] : [];
+        shouldListen = false;
+        finishListening();
+      } catch (error) {
+        shouldListen = false;
+        sessionOpen = false;
+        setTextDisplayMode(false);
+        setLanguageControlsDisabled(false);
+        resetMicButton();
+        setStatus(
+          error instanceof Error ? error.message : "시스템 음성 인식을 시작하지 못했어요.",
+          "error"
+        );
+      }
+    }
+
+    function validateTargetLanguages() {
+      const selectedTargets = targetLanguageSelects.map((select) => select.value);
+      if (selectedTargets.includes(sourceLanguageSelect.value)) {
+        setStatus("目标语言不能与输入语言相同。", "error");
+        return null;
+      }
+      if (new Set(selectedTargets).size !== selectedTargets.length) {
+        setStatus("请为每张卡片选择不同的目标语言。", "error");
+        return null;
+      }
+      return selectedTargets;
+    }
+
+    textTranslateButton.addEventListener("click", () => {
+      if (sessionOpen) {
+        setStatus("请先结束语音输入，再开始文本翻译。", "error");
+        return;
+      }
+      const targetLanguages = validateTargetLanguages();
+      if (!targetLanguages) return;
+      const text = sourceTextInput.value.trim();
+      if (!text) {
+        setStatus("请先输入要翻译的文本。", "error");
+        sourceTextInput.focus();
+        return;
+      }
+
+      void handleTranscript(text, sourceLanguageSelect.value, targetLanguages);
+    });
+
+    sourceTextInput.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault();
+        textTranslateButton.click();
+      }
+    });
+
     micButton.addEventListener("click", () => {
-      if (!recognition) return;
+      if (!useNativeSpeech && !recognition) return;
       if (shouldListen) {
         shouldListen = false;
         micButton.disabled = true;
-        micButton.textContent = "번역 준비 중…";
-        setStatus("말씀을 마무리하고 있어요...");
+        micButton.textContent = "正在整理语音…";
+        setStatus("正在完成语音识别…");
         window.clearTimeout(restartTimer);
-        if (recognitionActive || recognitionStarting) {
-          if (recognitionActive) recognition.stop();
+        if (recognitionActive) {
+          recognition.stop();
         } else {
           finishListening();
         }
         return;
       }
 
-      const selectedTargets = targetLanguageSelects.map((select) => select.value);
-      if (selectedTargets.includes(sourceLanguageSelect.value)) {
-        setStatus("번역할 언어는 말할 언어와 다르게 선택해 주세요.", "error");
-        return;
-      }
-      if (selectedTargets[0] === selectedTargets[1]) {
-        setStatus("B와 C 화면에 서로 다른 번역 언어를 선택해 주세요.", "error");
-        return;
-      }
+      if (!validateTargetLanguages()) return;
 
       transcriptParts = [];
       interimTranscript = "";
@@ -1303,7 +2276,7 @@
       showRecognizedText("");
       translationOutputs.forEach((output) => {
         output.latestAppliedRequestId = translationRequestId;
-        const placeholder = `말씀하시면 ${output.screenName} 화면에 번역 결과가 표시됩니다.`;
+        const placeholder = "翻译结果将在此显示。";
         output.text.textContent = placeholder;
         output.text.classList.add("is-placeholder");
         updateTextSize(output.text, "");
@@ -1311,6 +2284,17 @@
         output.copyButton.disabled = true;
         setOutputStatus(output, "");
       });
+      if (useNativeSpeech) {
+        sessionOpen = true;
+        shouldListen = true;
+        setTextDisplayMode(true);
+        setLanguageControlsDisabled(true);
+        micButton.disabled = true;
+        micButton.textContent = "正在打开系统语音识别…";
+        setStatus("请在系统语音识别窗口中说话，完成后关闭窗口。");
+        void startNativeRecognition();
+        return;
+      }
       recognition.lang = sourceLanguageSelect.selectedOptions[0].dataset.speech;
       sessionOpen = true;
       shouldListen = true;
@@ -1318,31 +2302,20 @@
       setLanguageControlsDisabled(true);
       micButton.classList.add("is-listening");
       micButton.textContent = "🔴 듣는 중 · 끝내려면 누르기";
-      setStatus("말씀하는 동안 B·C 화면에 번역 결과도 함께 표시돼요. 끝나면 마이크 버튼을 누르세요.");
+      setStatus("正在收听；结束后，结果会显示在所有目标语言卡片中。");
       startRecognition();
     });
 
     sourceLanguageSelect.addEventListener("change", () => {
-      updateMicLabel();
-    });
-    targetLanguageSelects.forEach((select) => {
-      select.addEventListener("change", () => {
-        updateOutputHeadings();
+      translationRequestId += 1;
+      translationOutputs.forEach((output) => {
+        output.latestAppliedRequestId = translationRequestId;
       });
+      updateMicLabel();
+      updateTargetControls();
     });
     updateMicLabel();
     updateOutputHeadings();
-
-    translationOutputs.forEach((output) => {
-      output.copyButton.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(output.copyText || output.text.textContent);
-          setStatus(`${output.screenName} 화면 번역을 복사했어요.`, "success");
-        } catch {
-          setStatus("복사할 수 없어요. 브라우저의 클립보드 권한을 확인해 주세요.", "error");
-        }
-      });
-    });
 
     const installButton = document.querySelector("#install-button");
     const installHelp = document.querySelector("#install-help");
@@ -1838,39 +2811,54 @@ const AVATAR_DATA = {
 
 
     /* --------------------------------------------- 언어별 캐릭터 선택 UI */
-    const COUNTRY_FLAGS = {
-      ko: "🇰🇷",
-      en: "🇺🇸",
-      ja: "🇯🇵",
-      "zh-CN": "🇨🇳",
-      es: "🇪🇸",
-      fr: "🇫🇷",
-      de: "🇩🇪",
-      it: "🇮🇹",
-      pt: "🇧🇷",
-      ru: "🇷🇺",
-      vi: "🇻🇳",
-      th: "🇹🇭",
-      id: "🇮🇩",
-      ar: "🇸🇦",
-      hi: "🇮🇳",
-      tr: "🇹🇷"
+    const LANGUAGE_NAMES = {
+      ko: "韩语",
+      en: "英语",
+      ja: "日语",
+      "zh-CN": "简体中文",
+      es: "西班牙语",
+      fr: "法语",
+      de: "德语",
+      it: "意大利语",
+      pt: "葡萄牙语",
+      ru: "俄语",
+      vi: "越南语",
+      th: "泰语",
+      id: "印度尼西亚语",
+      ar: "阿拉伯语",
+      hi: "印地语",
+      tr: "土耳其语"
+    };
+
+    const LANGUAGE_MARKS = {
+      ko: "韩",
+      en: "英",
+      ja: "日",
+      "zh-CN": "中",
+      es: "西",
+      fr: "法",
+      de: "德",
+      it: "意",
+      pt: "葡",
+      ru: "俄",
+      vi: "越",
+      th: "泰",
+      id: "印",
+      ar: "阿",
+      hi: "印",
+      tr: "土"
     };
 
     function avatarMarkup(key) {
-      const flag = COUNTRY_FLAGS[key];
-      return flag ? '<span class="country-flag" aria-hidden="true">' + flag + '</span>' : "";
+      const mark = LANGUAGE_MARKS[key];
+      return mark ? '<span class="lang-code" aria-hidden="true">' + mark + '</span>' : "";
     }
 
     function describeOption(option) {
-      const raw = option.textContent.trim();
-      const spaceIndex = raw.indexOf(" ");
-      const flag = spaceIndex > -1 ? raw.slice(0, spaceIndex) : "";
-      const rest = spaceIndex > -1 ? raw.slice(spaceIndex + 1) : raw;
-      const parts = rest.split(" · ");
-      const data = AVATAR_DATA[option.value];
-      const fallbackRegion = data ? (data.label.split(" · ")[1] || "") : "";
-      return { flag: flag, name: parts[0], region: parts[1] || fallbackRegion };
+      return {
+        name: LANGUAGE_NAMES[option.value] || option.textContent.trim(),
+        region: ""
+      };
     }
 
     function setupLanguagePicker(select) {
@@ -1916,7 +2904,9 @@ const AVATAR_DATA = {
       let activeIndex = -1;
 
       function currentOption() {
-        return select.options[select.selectedIndex] || options[0];
+        return select.selectedOptions[0]
+          || options.find((option) => option.value === select.value)
+          || options[0];
       }
 
       function renderList() {
@@ -1939,7 +2929,7 @@ const AVATAR_DATA = {
           copy.className = "lang-copy";
           const name = document.createElement("span");
           name.className = "lang-name";
-          name.textContent = (meta.flag ? meta.flag + " " : "") + meta.name;
+          name.textContent = meta.name;
           const region = document.createElement("span");
           region.className = "lang-country";
           region.textContent = meta.region;
@@ -2010,6 +3000,10 @@ const AVATAR_DATA = {
 
       function sync() {
         const option = currentOption();
+        if (!option) {
+          trigger.disabled = true;
+          return;
+        }
         const meta = describeOption(option);
         avatarBox.innerHTML = avatarMarkup(option.value);
         nameBox.textContent = meta.name;
@@ -2097,26 +3091,11 @@ const AVATAR_DATA = {
       wrap.appendChild(title);
     }
 
-    (function setupLanguageCharacters() {
-      const recognized = document.querySelector("#recognized-text");
-      const recognizedBlock = recognized ? recognized.closest(".result-block") : null;
-      const titleB = document.querySelector("#result-title-b");
-      const titleC = document.querySelector("#result-title-c");
-      const targets = [
-        {
-          select: document.querySelector("#source-language"),
-          heading: recognizedBlock ? recognizedBlock.querySelector(".result-heading") : null
-        },
-        { select: document.querySelector("#target-language-b"), heading: titleB ? titleB.parentElement : null },
-        { select: document.querySelector("#target-language-c"), heading: titleC ? titleC.parentElement : null }
-      ];
-      targets.forEach(function (target) {
-        attachLanguageChip(target.select, target.heading);
-      });
-      targets.forEach(function (target) {
-        setupLanguagePicker(target.select);
-      });
-    })();
+    window.initializeLanguageControl = function (select, heading) {
+      attachLanguageChip(select, heading);
+      setupLanguagePicker(select);
+    };
+    setupLanguagePicker(document.querySelector("#source-language"));
   </script>
 </body>
 </html>
