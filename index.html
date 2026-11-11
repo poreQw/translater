@@ -1,8 +1,8 @@
  <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7f1ff">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -130,10 +130,105 @@
 
     .theme-switcher {
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
       gap: 8px;
-      margin: 0 0 16px;
+      margin: 0;
     }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .app-brand { min-width: 0; }
+    .app-brand .eyebrow { margin-bottom: 4px; }
+    .app-brand h1 { margin: 0; }
+
+    .app-header + .intro {
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    .settings-button,
+    .settings-close-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      min-height: 46px;
+      padding: 8px 14px;
+      border: 1px solid #e4e9f2;
+      border-radius: 14px;
+      background: #fff;
+      color: #34425b;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .settings-dialog {
+      width: min(100% - 32px, 480px);
+      max-width: none;
+      max-height: min(80vh, 680px);
+      padding: 0;
+      margin: auto;
+      overflow: auto;
+      border: 1px solid #e4e9f2;
+      border-radius: 24px;
+      background: #f7f9fc;
+      color: #172033;
+      box-shadow: 0 24px 80px rgb(23 32 51 / 25%);
+    }
+
+    .settings-dialog::backdrop { background: rgb(17 24 39 / 48%); }
+    .settings-panel { display: grid; gap: 14px; padding: 20px; }
+    .settings-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .settings-header h2 { margin: 0; font-size: 1.35rem; }
+    .settings-header .eyebrow { margin: 0 0 2px; font-size: .72rem; }
+    .settings-section {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid #e5eaf2;
+      border-radius: 18px;
+      background: #fff;
+    }
+    .settings-section h3 { margin: 0; font-size: .95rem; }
+    .settings-language-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .settings-help { margin: 0; color: var(--ink-muted); font-size: .84rem; line-height: 1.5; }
+
+    body[data-theme="night"] .settings-dialog { border-color: #39465a; background: #19212d; color: #eef2f8; }
+    body[data-theme="night"] .settings-section { border-color: #39465a; background: #222b39; }
+    body[data-theme="night"] .settings-button,
+    body[data-theme="night"] .settings-close-button { border-color: #39465a; background: #202938; color: #bcd1ff; }
+
+    .results-toggle-button {
+      min-height: 44px;
+      padding: 8px 14px;
+      border: 1px solid #e4e9f2;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--accent-deep);
+      font: inherit;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .result[hidden],
+    .notice[hidden] { display: none; }
+
+    body[data-theme="night"] .results-toggle-button { border-color: #39465a; background: #202938; color: #bcd1ff; }
 
     .theme-switch {
       display: inline-flex;
@@ -340,37 +435,6 @@
     .mic-button.is-listening {
       background: linear-gradient(100deg, #e63e77, #fb7b73);
       box-shadow: 0 10px 25px rgb(230 62 119 / 26%);
-    }
-
-    .install-button {
-      display: block;
-      min-height: 44px;
-      margin: 0 auto 8px;
-      padding: 8px 18px;
-      border: 1px solid #e4daf8;
-      border-radius: 999px;
-      background: #f7f2ff;
-      color: var(--accent-deep);
-      font: inherit;
-      font-size: .9rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .install-button[hidden] { display: none; }
-
-    .install-help {
-      margin: 0 0 14px;
-      color: var(--ink-muted);
-      font-size: .8rem;
-      line-height: 1.5;
-      text-align: center;
-    }
-
-    body[data-theme="night"] .install-button {
-      border-color: #484158;
-      background: #292537;
-      color: #d7c7ff;
     }
 
     .status {
@@ -740,6 +804,7 @@
     .result-language-control label { flex: 0 0 auto; margin: 0; }
     .source-language-control .lang-picker { width: min(250px, 58vw); }
     .language-pair .lang-select-hidden,
+    .source-language-control .lang-select-hidden,
     .result-language-control .lang-select-hidden { display: none; }
 
     .source-text-input {
@@ -973,6 +1038,8 @@
       margin-top: 12px;
     }
 
+    .is-native-speech .mic-device-control { display: none; }
+
     .mic-device-control label { margin: 0; }
     .mic-device-control .speech-tip { grid-column: 1 / -1; margin: 0; text-align: left; }
     .mic-device-control select {
@@ -1131,7 +1198,6 @@
     main.is-text-display .source-input-actions .mic-button { min-height: 44px; }
 
     .copy-button,
-    .install-button,
     .theme-switch {
       min-height: 40px;
       border: 1px solid #e7ebf2;
@@ -1142,7 +1208,6 @@
     }
 
     .copy-button:hover:not(:disabled),
-    .install-button:hover,
     .theme-switch:hover {
       background: #edf3ff;
       box-shadow: 0 4px 12px rgb(52 120 246 / 12%);
@@ -1179,30 +1244,130 @@
     body[data-theme="night"] .source-text-input:focus { background: #1c2736; }
     body[data-theme="night"] .translate-button { background: #e8eef8; color: #172033; }
     body[data-theme="night"] .copy-button,
-    body[data-theme="night"] .install-button,
     body[data-theme="night"] .theme-switch { border-color: #39465a; background: #202938; color: #bcd1ff; }
 
     @media (max-width: 760px) {
-      body { padding: 12px; }
+      body {
+        min-height: 100svh;
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        overscroll-behavior-x: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
       main:not(.is-text-display) {
         width: 100%;
-        padding: 22px 16px;
-        border-radius: 20px;
+        padding: 18px 16px 28px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
       }
 
       .source-input-card,
       .result-block,
-      .result-block + .result-block { padding: 15px; }
-      .result { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-      .translated-text { min-height: 150px; }
-      .source-input-top,
+      .result-block + .result-block {
+        padding: 16px;
+        border-radius: 18px;
+      }
+
+      .eyebrow { margin-bottom: 6px; font-size: .75rem; }
+      .app-header { gap: 12px; }
+      .app-brand .eyebrow { margin-bottom: 2px; }
+      .app-brand h1 { font-size: 1.65rem; }
+      .header-actions { gap: 6px; }
+      .header-actions .settings-button { min-width: 44px; padding: 8px 10px; }
+      .header-actions .theme-switch { min-height: 44px; padding-right: 9px; font-size: .78rem; }
+      .settings-dialog {
+        position: fixed;
+        inset: auto 0 0;
+        width: 100%;
+        max-height: min(84svh, 680px);
+        margin: 0 auto;
+        border-radius: 24px 24px 0 0;
+      }
+      .settings-panel { gap: 12px; padding: 18px 16px max(20px, env(safe-area-inset-bottom)); }
+      .settings-section { gap: 8px; padding: 14px; border-radius: 16px; }
+      .settings-button,
+      .settings-close-button,
+      .results-toggle-button { min-height: 44px; }
+      .settings-language-actions .add-target-button { min-height: 44px; }
+      .settings-dialog[open] { animation: settings-sheet-in .18s ease-out; }
+      @keyframes settings-sheet-in {
+        from { transform: translateY(12px); opacity: .8; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      .results-toggle-button { min-width: 104px; }
+      .intro { margin: 6px 0 16px; font-size: .9rem; line-height: 1.5; }
+      .source-input-card { gap: 12px; margin-bottom: 16px; }
       .source-language-control { align-items: flex-start; flex-direction: column; }
       .source-language-control .lang-picker { width: 100%; }
-      .mic-device-control { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+      .source-language-control label { margin: 0; }
+      .source-language-control .lang-trigger { min-height: 48px; }
+      .source-input-card label { margin-bottom: 2px; }
+      .source-text-input { min-height: 112px; padding: 14px; border-radius: 12px; font-size: 1rem; }
+      select { min-height: 52px; padding: 0 14px; font-size: 16px; }
+      .mic-device-control { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+      .mic-device-control label { margin: 0; }
+      .mic-device-control select,
+      .refresh-microphones-button { min-height: 48px; font-size: .92rem; }
       .source-input-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
       .source-input-actions .mic-button,
-      .source-input-actions .translate-button { width: 100%; min-width: 0; min-height: 58px; }
-      .result-heading { min-height: 0; }
+      .source-input-actions .translate-button {
+        width: 100%;
+        min-width: 0;
+        min-height: 56px;
+        border-radius: 14px;
+        font-size: 1rem;
+        touch-action: manipulation;
+      }
+      .status { margin-bottom: 12px; font-size: .88rem; }
+      .speech-tip { margin-bottom: 16px; font-size: .8rem; }
+      .result-toolbar { align-items: center; gap: 10px; margin: 4px 0 12px; }
+      .result-toolbar h2 { font-size: 1rem; }
+      .target-count { font-size: .78rem; }
+      .add-target-button { min-height: 46px; padding: 8px 12px; white-space: nowrap; }
+      .result { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+      .result-heading {
+        min-height: 0;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .result-card-topline { flex: 0 0 auto; }
+      .result-card-topline h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+      .result-card-topline .remove-target-button { min-height: 40px; }
+      .result-language-control {
+        flex: 1 1 auto;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        margin-top: 0;
+      }
+      .result-language-control > label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+      .result-language-control .lang-picker { flex: 1 1 auto; min-width: 0; }
+      .result-language-control .lang-trigger { min-height: 46px; padding: 6px 10px; }
+      .result-language-control .lang-avatar { width: 26px; height: 26px; }
+      .result-language-control .country-flag { font-size: .72rem; }
+      .result-language-control .lang-name { font-size: .9rem; }
+      .result-language-control .panel-tools { flex: 0 0 auto; }
+      .result-language-control .display-window-button { display: none; }
+      .result-language-control .background-color-control { display: none; }
+      .remove-target-button,
+      .copy-button { min-height: 42px; }
+      .panel-tools { gap: 8px; }
+      .recognized-text,
+      .translated-text {
+        min-height: 120px;
+        padding: 14px;
+        border-radius: 12px;
+        font-size: 1rem;
+        line-height: 1.65;
+      }
+      .notice { margin-top: 14px; font-size: .76rem; }
+      body[data-theme="night"] main:not(.is-text-display) { border: 0; background: transparent; box-shadow: none; }
 
       main.is-text-display > .result {
         grid-template-columns: minmax(0, 1fr);
@@ -1225,79 +1390,101 @@
 </head>
 <body>
   <main id="app">
-    <p class="eyebrow">✨ SAY IT · SHARE IT</p>
-    <h1>말톡</h1>
-    <p class="intro">输入或说出内容，一次查看多种语言的翻译结果。</p>
-
-    <section class="source-input-card" aria-label="原文输入">
-      <div class="source-input-top">
-        <div class="source-language-control">
-          <label for="source-language">输入语言</label>
-          <select id="source-language">
-            <option value="ko" data-speech="ko-KR" selected>🇰🇷 한국어</option>
-            <option value="en" data-speech="en-US">🇺🇸 영어 · 미국</option>
-            <option value="ja" data-speech="ja-JP">🇯🇵 일본어 · 일본</option>
-            <option value="zh-CN" data-speech="zh-CN">🇨🇳 중국어(간체) · 중국</option>
-            <option value="es" data-speech="es-ES">🇪🇸 스페인어 · 스페인</option>
-            <option value="fr" data-speech="fr-FR">🇫🇷 프랑스어 · 프랑스</option>
-            <option value="de" data-speech="de-DE">🇩🇪 독일어 · 독일</option>
-            <option value="it" data-speech="it-IT">🇮🇹 이탈리아어 · 이탈리아</option>
-            <option value="pt" data-speech="pt-BR">🇧🇷 포르투갈어 · 브라질</option>
-            <option value="ru" data-speech="ru-RU">🇷🇺 러시아어 · 러시아</option>
-            <option value="vi" data-speech="vi-VN">🇻🇳 베트남어 · 베트남</option>
-            <option value="th" data-speech="th-TH">🇹🇭 태국어 · 태국</option>
-            <option value="id" data-speech="id-ID">🇮🇩 인도네시아어 · 인도네시아</option>
-            <option value="ar" data-speech="ar-SA">🇸🇦 아랍어 · 사우디아라비아</option>
-            <option value="hi" data-speech="hi-IN">🇮🇳 힌디어 · 인도</option>
-            <option value="tr" data-speech="tr-TR">🇹🇷 튀르키예어 · 튀르키예</option>
-          </select>
-        </div>
+    <header class="app-header">
+      <div class="app-brand">
+        <p class="eyebrow">말하고, 바로 통하는</p>
+        <h1>말톡</h1>
       </div>
+      <div class="header-actions">
+        <button class="theme-switch" id="theme-switch" type="button" role="switch" aria-checked="false" aria-label="밤 화면">
+          <span class="theme-track" aria-hidden="true"><span class="theme-knob">🌅</span></span>
+          <span class="theme-name">아침</span>
+        </button>
+        <button class="settings-button" id="settings-open-button" type="button" aria-haspopup="dialog">⚙️ 설정</button>
+      </div>
+    </header>
+    <p class="intro">말하거나 입력하면 여러 언어로 번역해 드려요.</p>
+
+    <dialog class="settings-dialog" id="settings-dialog" aria-labelledby="settings-title">
+      <div class="settings-panel">
+        <header class="settings-header">
+          <div>
+            <p class="eyebrow">말톡</p>
+            <h2 id="settings-title">설정</h2>
+          </div>
+          <button class="settings-close-button" id="settings-close-button" type="button">닫기</button>
+        </header>
+        <section class="settings-section" aria-labelledby="target-language-settings-title">
+          <h3 id="target-language-settings-title">번역 언어</h3>
+          <p class="settings-help">각 결과 카드에서 언어를 바꾸거나 삭제할 수 있어요.</p>
+          <div class="settings-language-actions">
+            <span class="target-count" id="settings-target-count"></span>
+            <button class="add-target-button" id="add-target-button" type="button">＋ 언어 추가</button>
+          </div>
+        </section>
+      </div>
+    </dialog>
+
+    <section class="source-input-card" aria-label="번역할 내용">
       <div class="mic-device-control">
-        <label for="mic-device-select">选择麦克风设备</label>
+        <label for="mic-device-select">마이크</label>
         <select id="mic-device-select" aria-describedby="mic-device-help">
-          <option value="default">系统默认麦克风</option>
+          <option value="default">기본 마이크</option>
         </select>
-        <button class="refresh-microphones-button" id="refresh-microphones-button" type="button">查找设备</button>
-        <span class="speech-tip" id="mic-device-help">点击“查找设备”并授权麦克风后，可显示设备名称。</span>
+        <button class="refresh-microphones-button" id="refresh-microphones-button" type="button">마이크 찾기</button>
+        <span class="speech-tip" id="mic-device-help">마이크를 선택하고 권한을 허용해 주세요.</span>
       </div>
       <textarea class="source-text-input" id="source-text-input" maxlength="3000"
-        placeholder="在这里输入要翻译的内容，或使用语音输入…" aria-label="输入要翻译的文本"></textarea>
+        placeholder="번역할 내용을 입력하거나 음성으로 말해 주세요." aria-label="번역할 내용 입력"></textarea>
+      <div class="source-language-control">
+        <label for="source-language">입력 언어</label>
+        <select id="source-language">
+          <option value="ko" data-speech="ko-KR" selected>🇰🇷 한국어</option>
+          <option value="en" data-speech="en-US">🇺🇸 영어 · 미국</option>
+          <option value="ja" data-speech="ja-JP">🇯🇵 일본어 · 일본</option>
+          <option value="zh-CN" data-speech="zh-CN">🇨🇳 중국어(간체) · 중국</option>
+          <option value="es" data-speech="es-ES">🇪🇸 스페인어 · 스페인</option>
+          <option value="fr" data-speech="fr-FR">🇫🇷 프랑스어 · 프랑스</option>
+          <option value="de" data-speech="de-DE">🇩🇪 독일어 · 독일</option>
+          <option value="it" data-speech="it-IT">🇮🇹 이탈리아어 · 이탈리아</option>
+          <option value="pt" data-speech="pt-BR">🇧🇷 포르투갈어 · 브라질</option>
+          <option value="ru" data-speech="ru-RU">🇷🇺 러시아어 · 러시아</option>
+          <option value="vi" data-speech="vi-VN">🇻🇳 베트남어 · 베트남</option>
+          <option value="th" data-speech="th-TH">🇹🇭 태국어 · 태국</option>
+          <option value="id" data-speech="id-ID">🇮🇩 인도네시아어 · 인도네시아</option>
+          <option value="ar" data-speech="ar-SA">🇸🇦 아랍어 · 사우디아라비아</option>
+          <option value="hi" data-speech="hi-IN">🇮🇳 힌디어 · 인도</option>
+          <option value="tr" data-speech="tr-TR">🇹🇷 튀르키예어 · 튀르키예</option>
+        </select>
+      </div>
       <div class="source-input-actions">
-        <button class="mic-button" id="mic-button" type="button">🎙️ 语音输入</button>
-        <button class="translate-button" id="translate-text-button" type="button">翻译全部语言</button>
+        <button class="mic-button" id="mic-button" type="button">🎙️ 음성으로 입력</button>
+        <button class="translate-button" id="translate-text-button" type="button">번역하기</button>
       </div>
     </section>
 
-    <div class="theme-switcher">
-      <button class="theme-switch" id="theme-switch" type="button" role="switch" aria-checked="false" aria-label="밤 화면">
-        <span class="theme-track" aria-hidden="true"><span class="theme-knob">🌅</span></span>
-        <span class="theme-name">아침</span>
-      </button>
-    </div>
-    <button class="install-button" id="install-button" type="button" hidden>📲 휴대폰에 설치</button>
-    <p class="install-help" id="install-help" hidden>휴대폰 설치: Android는 브라우저 메뉴에서 ‘앱 설치’를, iPhone은 Safari 공유 메뉴에서 ‘홈 화면에 추가’를 선택하세요.</p>
-    <p class="status" id="status" role="status" aria-live="polite">输入文本或语音后，结果会显示在下方语言卡片中。</p>
-    <p class="speech-tip">可输入文本后点击翻译，也可选择输入语言并使用语音输入。</p>
+    <p class="status" id="status" role="status" aria-live="polite">번역할 내용을 입력하거나 마이크를 눌러 말해 보세요.</p>
 
     <div class="result-toolbar">
       <div>
-        <h2>目标语言</h2>
+        <h2>번역 결과</h2>
         <span class="target-count" id="target-count"></span>
       </div>
-      <button class="add-target-button" id="add-target-button" type="button">＋ 添加语言</button>
+      <button class="results-toggle-button" id="results-toggle-button" type="button"
+        aria-controls="translation-results translation-notice" aria-expanded="true">결과 접기　⌃</button>
     </div>
-    <section class="result" id="translation-results" aria-label="翻译结果"></section>
-    <p class="notice">语音识别和翻译需要网络连接。浏览器和翻译服务可能会处理语音或输入文本。</p>
+    <section class="result" id="translation-results" aria-label="번역 결과"></section>
+    <p class="notice" id="translation-notice">음성 인식과 번역에는 인터넷 연결이 필요합니다.</p>
   </main>
   <section id="presentation-display" hidden aria-live="polite">
     <p class="presentation-language" id="presentation-language"></p>
-    <p class="presentation-translation is-placeholder" id="presentation-translation">等待翻译内容…</p>
+    <p class="presentation-translation is-placeholder" id="presentation-translation">번역 결과를 기다리는 중…</p>
   </section>
 
   <script type="module">
     const Capacitor = window.Capacitor;
     const useNativeSpeech = Capacitor?.getPlatform() === "android";
+    document.body.classList.toggle("is-native-speech", useNativeSpeech);
     let NativeSpeechRecognition;
     if (useNativeSpeech) {
       ({ SpeechRecognition: NativeSpeechRecognition } = await import("@capacitor-community/speech-recognition"));
@@ -1325,6 +1512,12 @@
     const resultsContainer = document.querySelector("#translation-results");
     const addTargetButton = document.querySelector("#add-target-button");
     const targetCount = document.querySelector("#target-count");
+    const settingsTargetCount = document.querySelector("#settings-target-count");
+    const settingsDialog = document.querySelector("#settings-dialog");
+    const settingsOpenButton = document.querySelector("#settings-open-button");
+    const settingsCloseButton = document.querySelector("#settings-close-button");
+    const resultsToggleButton = document.querySelector("#results-toggle-button");
+    const translationNotice = document.querySelector("#translation-notice");
     const themeSwitch = document.querySelector("#theme-switch");
     const micButton = document.querySelector("#mic-button");
     const textTranslateButton = document.querySelector("#translate-text-button");
@@ -1367,6 +1560,20 @@
       if (statusText.textContent !== message) statusText.textContent = message;
       if (statusText.dataset.kind !== kind) statusText.dataset.kind = kind;
     }
+
+    settingsOpenButton.addEventListener("click", () => settingsDialog.showModal());
+    settingsCloseButton.addEventListener("click", () => settingsDialog.close());
+    settingsDialog.addEventListener("click", (event) => {
+      if (event.target === settingsDialog) settingsDialog.close();
+    });
+
+    resultsToggleButton.addEventListener("click", () => {
+      const expanded = resultsToggleButton.getAttribute("aria-expanded") !== "true";
+      resultsToggleButton.setAttribute("aria-expanded", String(expanded));
+      resultsContainer.hidden = !expanded;
+      translationNotice.hidden = !expanded;
+      resultsToggleButton.textContent = expanded ? "결과 접기　⌃" : "결과 펼치기　⌄";
+    });
 
     function applyTheme(theme) {
       const isNight = theme === "night";
@@ -1435,7 +1642,7 @@
     function renderPresentation(payload) {
       if (!payload || payload.id !== presentationTargetId) return;
       presentationLanguage.textContent = payload.languageName;
-      presentationTranslation.textContent = payload.removed ? "此语言卡片已关闭" : payload.text;
+      presentationTranslation.textContent = payload.removed ? "이 번역 화면이 닫혔습니다." : payload.text;
       presentationTranslation.classList.toggle(
         "is-placeholder",
         Boolean(payload.removed || payload.placeholder)
@@ -1458,7 +1665,7 @@
         localStorage.setItem(presentationStoragePrefix + output.id, JSON.stringify(payload));
       } catch {
         if (!presentationBus) {
-          setStatus("无法保存投屏内容，请允许浏览器使用本地存储。", "error");
+          setStatus("화면 표시 내용을 저장하지 못했어요. 브라우저 저장 권한을 확인해 주세요.", "error");
         }
       }
       presentationBus?.postMessage(payload);
@@ -1470,7 +1677,7 @@
       url.searchParams.set("display", output.id);
       const displayWindow = window.open(url.href, `translation-${output.id}`);
       if (!displayWindow || displayWindow.closed) {
-        setStatus("投屏窗口未能打开，请允许此网站弹出窗口。", "error");
+        setStatus("화면 표시 창을 열지 못했어요. 팝업 허용 여부를 확인해 주세요.", "error");
       }
     }
 
@@ -1478,19 +1685,19 @@
       if (useNativeSpeech) {
         microphoneSelect.disabled = true;
         refreshMicrophonesButton.disabled = true;
-        microphoneHelp.textContent = "系统语音识别使用设备默认麦克风；当前原生识别插件不支持选择输入设备。";
+        microphoneHelp.textContent = "휴대폰 기본 마이크를 사용합니다.";
         return;
       }
       if (!navigator.mediaDevices?.enumerateDevices) {
         microphoneSelect.disabled = true;
         refreshMicrophonesButton.disabled = true;
-        microphoneHelp.textContent = "此浏览器不支持麦克风设备枚举，请使用新版 Chrome 或 Edge。";
+        microphoneHelp.textContent = "이 브라우저에서는 마이크 목록을 확인할 수 없어요. 최신 Chrome 또는 Edge를 사용해 주세요.";
         return;
       }
 
       if (requestPermission) {
         if (!navigator.mediaDevices.getUserMedia) {
-          throw new Error("此浏览器不支持麦克风访问。");
+          throw new Error("이 브라우저는 마이크를 지원하지 않아요.");
         }
         const permissionStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         permissionStream.getTracks().forEach((track) => track.stop());
@@ -1502,10 +1709,10 @@
         : savedDeviceId || "default";
       const devices = await navigator.mediaDevices.enumerateDevices();
       const microphoneDevices = devices.filter((device) => device.kind === "audioinput");
-      microphoneSelect.replaceChildren(new Option("系统默认麦克风", "default"));
+      microphoneSelect.replaceChildren(new Option("기본 마이크", "default"));
       microphoneDevices.forEach((device, index) => {
         if (!device.deviceId || device.deviceId === "default") return;
-        const label = device.label || `麦克风 ${index + 1}`;
+        const label = device.label || `마이크 ${index + 1}`;
         microphoneSelect.add(new Option(label, device.deviceId));
       });
       microphoneSelect.value = Array.from(microphoneSelect.options)
@@ -1515,8 +1722,8 @@
       microphoneSelect.disabled = sessionOpen || microphoneDevices.length === 0;
       refreshMicrophonesButton.disabled = sessionOpen;
       microphoneHelp.textContent = microphoneDevices.some((device) => device.label)
-        ? "选择需要使用的外接麦克风；浏览器须支持将音轨交给语音识别。"
-        : "点击“查找设备”并授权麦克风后，可显示设备名称。";
+        ? "사용할 외부 마이크를 선택하세요."
+        : "마이크 찾기를 누르고 권한을 허용하면 기기 이름이 표시됩니다.";
     }
 
     presentationBus?.addEventListener("message", (event) => {
@@ -1545,45 +1752,45 @@
       presentationBus?.close();
     });
     void refreshMicrophoneDevices().catch((error) => {
-      microphoneHelp.textContent = error instanceof Error ? error.message : "无法读取麦克风设备。";
+      microphoneHelp.textContent = error instanceof Error ? error.message : "마이크 목록을 불러오지 못했어요.";
     });
     refreshMicrophonesButton.addEventListener("click", async () => {
       try {
         await refreshMicrophoneDevices(true);
       } catch (error) {
-        setStatus(error instanceof Error ? error.message : "无法访问麦克风设备。", "error");
+        setStatus(error instanceof Error ? error.message : "마이크에 연결하지 못했어요.", "error");
       }
     });
     microphoneSelect.addEventListener("change", () => {
       try {
         localStorage.setItem("sayit-microphone-device", microphoneSelect.value);
       } catch (error) {
-        setStatus(error instanceof Error ? error.message : "无法保存麦克风设置。", "error");
+        setStatus(error instanceof Error ? error.message : "마이크 설정을 저장하지 못했어요.", "error");
       }
     });
     navigator.mediaDevices?.addEventListener?.("devicechange", () => {
       void refreshMicrophoneDevices().catch((error) => {
-        microphoneHelp.textContent = error instanceof Error ? error.message : "无法刷新麦克风设备列表。";
+        microphoneHelp.textContent = error instanceof Error ? error.message : "마이크 목록을 새로 고치지 못했어요.";
       });
     });
 
     const DISPLAY_LANGUAGE_NAMES = {
-      ko: "韩语",
-      en: "英语",
-      ja: "日语",
-      "zh-CN": "简体中文",
-      es: "西班牙语",
-      fr: "法语",
-      de: "德语",
-      it: "意大利语",
-      pt: "葡萄牙语",
-      ru: "俄语",
-      vi: "越南语",
-      th: "泰语",
-      id: "印度尼西亚语",
-      ar: "阿拉伯语",
-      hi: "印地语",
-      tr: "土耳其语"
+      ko: "한국어",
+      en: "영어",
+      ja: "일본어",
+      "zh-CN": "중국어",
+      es: "스페인어",
+      fr: "프랑스어",
+      de: "독일어",
+      it: "이탈리아어",
+      pt: "포르투갈어",
+      ru: "러시아어",
+      vi: "베트남어",
+      th: "태국어",
+      id: "인도네시아어",
+      ar: "아랍어",
+      hi: "힌디어",
+      tr: "튀르키예어"
     };
 
     function getLanguageName(select) {
@@ -1592,19 +1799,21 @@
 
     function updateOutputHeadings() {
       translationOutputs.forEach((output) => {
-        output.heading.textContent = `${output.screenName} · ${getLanguageName(output.languageSelect)} 翻译`;
+        output.heading.textContent = `${getLanguageName(output.languageSelect)} 번역`;
         publishOutput(output);
       });
     }
 
     function updateTargetControls() {
-      targetCount.textContent = `当前 ${translationOutputs.length} 个目标语言`;
+      const countText = `${translationOutputs.length}개 언어`;
+      targetCount.textContent = countText;
+      settingsTargetCount.textContent = countText;
       const selectedLanguages = new Set(targetLanguageSelects.map((select) => select.value));
       const hasAvailableLanguage = Array.from(sourceLanguageSelect.options)
         .some((option) => option.value !== sourceLanguageSelect.value && !selectedLanguages.has(option.value));
       addTargetButton.disabled = !hasAvailableLanguage;
       translationOutputs.forEach((output, index) => {
-        output.screenName = `屏幕 ${index + 1}`;
+        output.screenName = `화면 ${index + 1}`;
         output.removeButton.disabled = translationOutputs.length === 1;
       });
       updateOutputHeadings();
@@ -1626,8 +1835,8 @@
       const removeButton = document.createElement("button");
       removeButton.className = "remove-target-button";
       removeButton.type = "button";
-      removeButton.textContent = "删除";
-      removeButton.setAttribute("aria-label", "删除此目标语言");
+      removeButton.textContent = "삭제";
+      removeButton.setAttribute("aria-label", "번역 언어 삭제");
       topLine.append(title, removeButton);
 
       const languageControl = document.createElement("div");
@@ -1636,7 +1845,7 @@
       const languageSelect = document.createElement("select");
       languageSelect.id = `target-language-${cardId}`;
       languageLabel.htmlFor = languageSelect.id;
-      languageLabel.textContent = "目标语言";
+      languageLabel.textContent = "번역 언어";
       Array.from(sourceLanguageSelect.options).forEach((option) => {
         languageSelect.appendChild(option.cloneNode(true));
       });
@@ -1650,23 +1859,23 @@
       colorInput.type = "color";
       colorInput.value = "#ffffff";
       colorInput.dataset.colorTarget = `translated-text-${cardId}`;
-      colorInput.setAttribute("aria-label", "翻译结果背景色");
+      colorInput.setAttribute("aria-label", "번역 결과 배경색");
       colorLabel.appendChild(colorInput);
       const copyButton = document.createElement("button");
       copyButton.className = "copy-button";
       copyButton.type = "button";
-      copyButton.textContent = "复制";
+      copyButton.textContent = "복사";
       copyButton.disabled = true;
       const displayButton = document.createElement("button");
       displayButton.className = "display-window-button";
       displayButton.type = "button";
-      displayButton.textContent = "投屏窗口";
+      displayButton.textContent = "화면에 띄우기";
       panelTools.append(colorLabel, copyButton, displayButton);
 
       const translatedText = document.createElement("p");
       translatedText.className = "translated-text is-placeholder";
       translatedText.id = `translated-text-${cardId}`;
-      translatedText.textContent = "翻译结果将在此显示。";
+      translatedText.textContent = "번역 결과가 여기에 표시됩니다.";
       const translationStatus = document.createElement("p");
       translationStatus.className = "translation-status";
       translationStatus.setAttribute("role", "status");
@@ -1712,9 +1921,9 @@
       copyButton.addEventListener("click", async () => {
         try {
           await navigator.clipboard.writeText(output.copyText || output.text.textContent);
-          setStatus(`${output.screenName} 翻译已复制。`, "success");
+          setStatus(`${output.screenName} 번역을 복사했어요.`, "success");
         } catch {
-          setStatus("无法复制，请检查浏览器的剪贴板权限。", "error");
+          setStatus("복사하지 못했어요. 클립보드 권한을 확인해 주세요.", "error");
         }
       });
       displayButton.addEventListener("click", () => openPresentationWindow(output));
@@ -1795,12 +2004,20 @@
       translationCache.set(cacheKey, translatedText);
     }
 
+    function isQuestionMarkOnlyTranslation(sourceText, translatedText) {
+      return typeof translatedText === "string"
+        && /^[?？\uFFFD\s]+$/u.test(translatedText)
+        && /[\p{L}\p{N}]/u.test(sourceText);
+    }
+
     async function requestTranslation(text, sourceLanguage, targetLanguage) {
+      let myMemoryError;
       if (window.desktopAPI?.translate) {
-        return window.desktopAPI.translate({ text, sourceLanguage, targetLanguage });
+        const translatedText = await window.desktopAPI.translate({ text, sourceLanguage, targetLanguage });
+        if (!isQuestionMarkOnlyTranslation(text, translatedText)) return translatedText;
+        myMemoryError = new Error("Desktop translation returned only question marks.");
       }
 
-      let myMemoryError;
       if (Date.now() >= myMemoryUnavailableUntil) {
         try {
           const params = new URLSearchParams({
@@ -1824,7 +2041,11 @@
           if (result.responseStatus !== 200 || !result.responseData?.translatedText) {
             throw new Error(result.responseDetails || "MyMemory returned an empty translation.");
           }
-          return result.responseData.translatedText;
+          const translatedText = result.responseData.translatedText;
+          if (isQuestionMarkOnlyTranslation(text, translatedText)) {
+            throw new Error("MyMemory returned only question marks.");
+          }
+          return translatedText;
         } catch (error) {
           myMemoryError = error;
         }
@@ -1851,6 +2072,9 @@
             ? result[0].map((segment) => segment?.[0] || "").join("")
             : "";
           if (!translatedText) throw new Error("Google Translate returned an empty translation.");
+          if (isQuestionMarkOnlyTranslation(text, translatedText)) {
+            throw new Error("Google Translate returned only question marks.");
+          }
           return translatedText;
         } catch (error) {
           googleFallbackUnavailableUntil = Date.now() + 30 * 1000;
@@ -1908,7 +2132,7 @@
 
     function updateMicLabel() {
       const languageName = getLanguageName(sourceLanguageSelect);
-      micButton.textContent = `🎙️ ${languageName}语音输入`;
+      micButton.textContent = `🎙️ ${languageName} 음성 입력`;
     }
 
     function resetMicButton() {
@@ -1956,19 +2180,28 @@
       recognitionStarting = true;
       try {
         if (microphoneSelect.value === "default") {
+          if (!navigator.mediaDevices?.getUserMedia) {
+            throw new Error("이 브라우저는 마이크를 지원하지 않아요.");
+          }
+          const permissionStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          permissionStream.getTracks().forEach((track) => track.stop());
+          if (!shouldListen) {
+            recognitionStarting = false;
+            return;
+          }
           recognition.start();
           return;
         }
         if (!navigator.mediaDevices?.getUserMedia) {
-          throw new Error("此浏览器不支持选择麦克风设备。");
+          throw new Error("이 브라우저에서는 마이크를 선택할 수 없어요.");
         }
         activeMicrophoneStream = await navigator.mediaDevices.getUserMedia({
           audio: { deviceId: { exact: microphoneSelect.value } }
         });
         const microphoneTrack = activeMicrophoneStream.getAudioTracks()[0];
-        if (!microphoneTrack) throw new Error("所选麦克风没有可用的音频输入。");
+        if (!microphoneTrack) throw new Error("선택한 마이크에서 소리가 입력되지 않아요.");
         void refreshMicrophoneDevices().catch((error) => {
-          microphoneHelp.textContent = error instanceof Error ? error.message : "无法刷新麦克风设备列表。";
+          microphoneHelp.textContent = error instanceof Error ? error.message : "마이크 목록을 새로 고치지 못했어요.";
         });
         if (!shouldListen) {
           releaseMicrophoneStream();
@@ -1994,8 +2227,8 @@
           && (error instanceof TypeError
             || error instanceof DOMException && error.name === "NotSupportedError");
         const message = selectedMicUnsupported
-          ? "当前浏览器不支持将所选麦克风音轨接入语音识别，请使用新版 Chrome 或 Edge。"
-          : error instanceof Error ? error.message : "麦克风或语音识别启动失败。";
+          ? "이 브라우저는 선택한 마이크로 음성 인식할 수 없어요. 최신 Chrome 또는 Edge를 사용해 주세요."
+          : error instanceof Error ? error.message : "마이크 또는 음성 인식을 시작하지 못했어요.";
         setStatus(message, "error");
       }
     }
@@ -2011,7 +2244,7 @@
       } catch (error) {
         if (requestId < output.latestAppliedRequestId) return false;
         output.latestAppliedRequestId = requestId;
-        const failureMessage = "该语言翻译失败，请重试";
+        const failureMessage = "번역에 실패했어요. 다시 시도해 주세요.";
         output.text.textContent = failureMessage;
         output.text.classList.remove("is-placeholder");
         updateTextSize(output.text, failureMessage);
@@ -2084,7 +2317,7 @@
       const results = await translateOutputs(spokenText, sourceLanguage, targetLanguages, requestId);
       if (requestId !== translationRequestId) return;
       setStatus(
-        results.every(Boolean) ? "所有目标语言翻译已完成。" : "部分翻译失败，请查看对应语言卡片。",
+        results.every(Boolean) ? "모든 번역이 완료됐어요." : "일부 번역에 실패했어요. 결과를 확인해 주세요.",
         results.every(Boolean) ? "success" : "error"
       );
     }
@@ -2108,7 +2341,7 @@
         }
         micButton.classList.add("is-listening");
         micButton.textContent = "🔴 듣는 중 · 끝내려면 누르기";
-        setStatus("正在收听；结束后，结果会显示在所有目标语言卡片中。");
+        setStatus("듣고 있어요. 말을 마치면 번역 결과를 보여드릴게요.");
       };
 
       recognition.onresult = (event) => {
@@ -2136,10 +2369,10 @@
 
       recognition.onerror = (event) => {
         const messages = {
-          "not-allowed": "마이크 권한이 필요해요. 브라우저 설정에서 마이크를 허용해 주세요.",
+          "not-allowed": "마이크 권한이 거부됐어요. 앱 또는 브라우저와 휴대폰 설정에서 마이크 접근을 허용해 주세요.",
           "audio-capture": "마이크를 찾을 수 없어요. 연결 상태를 확인해 주세요.",
           "network": "인터넷 연결이 잠시 끊겼어요. 다시 연결해 계속 들을게요.",
-          "service-not-allowed": "브라우저에서 음성 인식 서비스를 사용할 수 없어요."
+          "service-not-allowed": "음성 인식 서비스를 사용할 수 없어요. 인터넷 연결 또는 이 앱에서 음성 인식 서비스가 지원되는지 확인해 주세요."
         };
         if (event.error === "no-speech" || event.error === "aborted") return;
         if (event.error === "network" && shouldListen) {
@@ -2174,7 +2407,18 @@
       };
     }
 
+    function failNativeRecognition(error, fallbackMessage) {
+      shouldListen = false;
+      sessionOpen = false;
+      setTextDisplayMode(false);
+      setLanguageControlsDisabled(false);
+      resetMicButton();
+      setStatus(error instanceof Error ? error.message : fallbackMessage, "error");
+    }
+
     async function startNativeRecognition() {
+      let listeningStateListener;
+      let startupTimeout;
       try {
         const permission = await NativeSpeechRecognition.requestPermissions();
         if (permission.speechRecognition !== "granted") {
@@ -2183,41 +2427,68 @@
 
         const { available } = await NativeSpeechRecognition.available();
         if (!available) {
-          throw new Error("휴대폰에서 사용할 수 있는 시스템 음성 인식 서비스를 찾지 못했어요.");
+          throw new Error("휴대폰에 음성 인식 서비스가 설치되어 있고 인터넷에 연결되어 있는지 확인해 주세요.");
         }
 
-        const result = await NativeSpeechRecognition.start({
+        const startupFailure = new Promise((resolve, reject) => {
+          startupTimeout = window.setTimeout(
+            () => reject(new Error("speech-recognition-service-timeout")),
+            20000
+          );
+        });
+        listeningStateListener = await NativeSpeechRecognition.addListener("listeningState", ({ status }) => {
+          if (status === "started") window.clearTimeout(startupTimeout);
+        });
+        const recognitionResult = NativeSpeechRecognition.start({
           language: sourceLanguageSelect.selectedOptions[0].dataset.speech,
           maxResults: 1,
           partialResults: false,
-          popup: true,
-          prompt: "말씀해 주세요"
+          popup: false
         });
+        micButton.disabled = false;
+        micButton.classList.add("is-listening");
+        micButton.textContent = "🔴 듣는 중 · 끝내려면 누르기";
+        setStatus("듣고 있어요. 말을 마친 뒤 마이크 버튼을 눌러 입력을 끝내 주세요.");
+        const result = await Promise.race([recognitionResult, startupFailure]);
 
         transcriptParts = result.matches?.[0] ? [result.matches[0]] : [];
         shouldListen = false;
         finishListening();
       } catch (error) {
-        shouldListen = false;
-        sessionOpen = false;
-        setTextDisplayMode(false);
-        setLanguageControlsDisabled(false);
-        resetMicButton();
-        setStatus(
-          error instanceof Error ? error.message : "시스템 음성 인식을 시작하지 못했어요.",
-          "error"
-        );
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const serviceUnavailable = /speech-recognition-service-timeout|Not allowed to bind to service|FakeRecognitionService|RecognitionService|Client side error/i
+          .test(errorMessage);
+        if (serviceUnavailable) {
+          void NativeSpeechRecognition.stop().catch((stopError) => {
+            console.error("Could not stop the unavailable speech recognition service.", stopError);
+          });
+          failNativeRecognition(
+            new Error("화웨이 기본 음성 인식 서비스가 앱 연결을 거부했어요. 휴대폰 설정에서 다른 음성 인식 서비스(예: Google 음성 인식)를 선택하거나, 입력란을 누른 뒤 키보드의 마이크로 말해 주세요."),
+            "음성 인식 서비스를 시작하지 못했어요."
+          );
+        } else {
+          failNativeRecognition(error, "시스템 음성 인식을 시작하지 못했어요.");
+        }
+      } finally {
+        window.clearTimeout(startupTimeout);
+        if (listeningStateListener) {
+          try {
+            await listeningStateListener.remove();
+          } catch (error) {
+            console.error("Could not remove the native speech recognition listener.", error);
+          }
+        }
       }
     }
 
     function validateTargetLanguages() {
       const selectedTargets = targetLanguageSelects.map((select) => select.value);
       if (selectedTargets.includes(sourceLanguageSelect.value)) {
-        setStatus("目标语言不能与输入语言相同。", "error");
+        setStatus("입력 언어와 번역 언어는 달라야 해요.", "error");
         return null;
       }
       if (new Set(selectedTargets).size !== selectedTargets.length) {
-        setStatus("请为每张卡片选择不同的目标语言。", "error");
+        setStatus("번역 언어를 서로 다르게 선택해 주세요.", "error");
         return null;
       }
       return selectedTargets;
@@ -2225,14 +2496,14 @@
 
     textTranslateButton.addEventListener("click", () => {
       if (sessionOpen) {
-        setStatus("请先结束语音输入，再开始文本翻译。", "error");
+        setStatus("음성 입력을 먼저 끝내 주세요.", "error");
         return;
       }
       const targetLanguages = validateTargetLanguages();
       if (!targetLanguages) return;
       const text = sourceTextInput.value.trim();
       if (!text) {
-        setStatus("请先输入要翻译的文本。", "error");
+        setStatus("번역할 내용을 입력해 주세요.", "error");
         sourceTextInput.focus();
         return;
       }
@@ -2252,10 +2523,14 @@
       if (shouldListen) {
         shouldListen = false;
         micButton.disabled = true;
-        micButton.textContent = "正在整理语音…";
-        setStatus("正在完成语音识别…");
+        micButton.textContent = "음성을 정리하고 있어요…";
+        setStatus("음성 인식을 마무리하고 있어요…");
         window.clearTimeout(restartTimer);
-        if (recognitionActive) {
+        if (useNativeSpeech) {
+          void NativeSpeechRecognition.stop().catch((error) => {
+            failNativeRecognition(error, "시스템 음성 인식을 중지하지 못했어요.");
+          });
+        } else if (recognitionActive) {
           recognition.stop();
         } else {
           finishListening();
@@ -2276,7 +2551,7 @@
       showRecognizedText("");
       translationOutputs.forEach((output) => {
         output.latestAppliedRequestId = translationRequestId;
-        const placeholder = "翻译结果将在此显示。";
+        const placeholder = "번역 결과가 여기에 표시됩니다.";
         output.text.textContent = placeholder;
         output.text.classList.add("is-placeholder");
         updateTextSize(output.text, "");
@@ -2284,25 +2559,21 @@
         output.copyButton.disabled = true;
         setOutputStatus(output, "");
       });
-      if (useNativeSpeech) {
-        sessionOpen = true;
-        shouldListen = true;
-        setTextDisplayMode(true);
-        setLanguageControlsDisabled(true);
-        micButton.disabled = true;
-        micButton.textContent = "正在打开系统语音识别…";
-        setStatus("请在系统语音识别窗口中说话，完成后关闭窗口。");
-        void startNativeRecognition();
-        return;
-      }
-      recognition.lang = sourceLanguageSelect.selectedOptions[0].dataset.speech;
       sessionOpen = true;
       shouldListen = true;
       setTextDisplayMode(true);
       setLanguageControlsDisabled(true);
+      if (useNativeSpeech) {
+        micButton.disabled = true;
+        micButton.textContent = "음성 인식을 여는 중…";
+        setStatus("음성 인식 창에서 말씀하신 뒤 창을 닫아 주세요.");
+        void startNativeRecognition();
+        return;
+      }
+      recognition.lang = sourceLanguageSelect.selectedOptions[0].dataset.speech;
       micButton.classList.add("is-listening");
       micButton.textContent = "🔴 듣는 중 · 끝내려면 누르기";
-      setStatus("正在收听；结束后，结果会显示在所有目标语言卡片中。");
+      setStatus("듣고 있어요. 말을 마치면 번역 결과를 보여드릴게요.");
       startRecognition();
     });
 
@@ -2316,55 +2587,6 @@
     });
     updateMicLabel();
     updateOutputHeadings();
-
-    const installButton = document.querySelector("#install-button");
-    const installHelp = document.querySelector("#install-help");
-    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent)
-      || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches
-      || navigator.standalone === true;
-    let deferredInstallPrompt;
-
-    if (!isStandalone && (/android|iphone|ipad|ipod/i.test(navigator.userAgent) || isIos)) {
-      installButton.hidden = false;
-      installHelp.hidden = false;
-    }
-
-    window.addEventListener("beforeinstallprompt", (event) => {
-      event.preventDefault();
-      deferredInstallPrompt = event;
-      installButton.hidden = false;
-      installHelp.hidden = false;
-    });
-
-    installButton.addEventListener("click", async () => {
-      if (!deferredInstallPrompt) {
-        setStatus(isIos
-          ? "Safari 공유 메뉴에서 ‘홈 화면에 추가’를 선택해 설치해 주세요."
-          : "브라우저 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택해 주세요.");
-        return;
-      }
-
-      const promptEvent = deferredInstallPrompt;
-      deferredInstallPrompt = null;
-      try {
-        await promptEvent.prompt();
-        const choice = await promptEvent.userChoice;
-        if (choice.outcome === "accepted") {
-          setStatus("휴대폰에 앱을 설치하고 있어요.", "success");
-        }
-      } catch (error) {
-        console.error("앱 설치 요청에 실패했습니다.", error);
-        setStatus("앱 설치를 시작하지 못했어요. 브라우저 메뉴에서 다시 시도해 주세요.", "error");
-      }
-    });
-
-    window.addEventListener("appinstalled", () => {
-      deferredInstallPrompt = null;
-      installButton.hidden = true;
-      installHelp.hidden = true;
-      setStatus("말톡을 휴대폰에 설치했어요.", "success");
-    });
 
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("./service-worker.js").catch((error) => {
@@ -2812,41 +3034,41 @@ const AVATAR_DATA = {
 
     /* --------------------------------------------- 언어별 캐릭터 선택 UI */
     const LANGUAGE_NAMES = {
-      ko: "韩语",
-      en: "英语",
-      ja: "日语",
-      "zh-CN": "简体中文",
-      es: "西班牙语",
-      fr: "法语",
-      de: "德语",
-      it: "意大利语",
-      pt: "葡萄牙语",
-      ru: "俄语",
-      vi: "越南语",
-      th: "泰语",
-      id: "印度尼西亚语",
-      ar: "阿拉伯语",
-      hi: "印地语",
-      tr: "土耳其语"
+      ko: "한국어",
+      en: "영어",
+      ja: "일본어",
+      "zh-CN": "중국어",
+      es: "스페인어",
+      fr: "프랑스어",
+      de: "독일어",
+      it: "이탈리아어",
+      pt: "포르투갈어",
+      ru: "러시아어",
+      vi: "베트남어",
+      th: "태국어",
+      id: "인도네시아어",
+      ar: "아랍어",
+      hi: "힌디어",
+      tr: "튀르키예어"
     };
 
     const LANGUAGE_MARKS = {
-      ko: "韩",
-      en: "英",
-      ja: "日",
-      "zh-CN": "中",
-      es: "西",
-      fr: "法",
-      de: "德",
-      it: "意",
-      pt: "葡",
-      ru: "俄",
-      vi: "越",
-      th: "泰",
-      id: "印",
-      ar: "阿",
-      hi: "印",
-      tr: "土"
+      ko: "한",
+      en: "영",
+      ja: "일",
+      "zh-CN": "중",
+      es: "서",
+      fr: "불",
+      de: "독",
+      it: "이",
+      pt: "포",
+      ru: "러",
+      vi: "베",
+      th: "태",
+      id: "인",
+      ar: "아",
+      hi: "힌",
+      tr: "튀"
     };
 
     function avatarMarkup(key) {

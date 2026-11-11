@@ -5,3 +5,8 @@ www/
 .idea/
 .env*
 !.env.example
+release/
+dist/
+.env.local
+.env
+android/

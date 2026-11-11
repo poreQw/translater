@@ -149,9 +149,15 @@ async function translateWithBaidu({ text, sourceLanguage, targetLanguage }) {
 
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
+  session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
+    return permission === "media"
+      && Boolean(webContents)
+      && isAppPage(webContents.getURL());
+  });
   session.defaultSession.setPermissionRequestHandler((webContents, permission, callback, details) => {
     const allowed = permission === "media"
-      && details.mediaTypes?.includes("audio")
+      && details?.mediaTypes?.includes("audio")
+      && Boolean(webContents)
       && isAppPage(webContents.getURL());
     callback(Boolean(allowed));
   });
