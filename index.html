@@ -2417,8 +2417,6 @@
     }
 
     async function startNativeRecognition() {
-      let listeningStateListener;
-      let startupTimeout;
       try {
         const permission = await NativeSpeechRecognition.requestPermissions();
         if (permission.speechRecognition !== "granted") {
@@ -2430,15 +2428,6 @@
           throw new Error("휴대폰에 음성 인식 서비스가 설치되어 있고 인터넷에 연결되어 있는지 확인해 주세요.");
         }
 
-        const startupFailure = new Promise((resolve, reject) => {
-          startupTimeout = window.setTimeout(
-            () => reject(new Error("speech-recognition-service-timeout")),
-            20000
-          );
-        });
-        listeningStateListener = await NativeSpeechRecognition.addListener("listeningState", ({ status }) => {
-          if (status === "started") window.clearTimeout(startupTimeout);
-        });
         const recognitionResult = NativeSpeechRecognition.start({
           language: sourceLanguageSelect.selectedOptions[0].dataset.speech,
           maxResults: 1,
@@ -2449,35 +2438,13 @@
         micButton.classList.add("is-listening");
         micButton.textContent = "🔴 듣는 중 · 끝내려면 누르기";
         setStatus("듣고 있어요. 말을 마친 뒤 마이크 버튼을 눌러 입력을 끝내 주세요.");
-        const result = await Promise.race([recognitionResult, startupFailure]);
+        const result = await recognitionResult;
 
         transcriptParts = result.matches?.[0] ? [result.matches[0]] : [];
         shouldListen = false;
         finishListening();
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        const serviceUnavailable = /speech-recognition-service-timeout|Not allowed to bind to service|FakeRecognitionService|RecognitionService|Client side error/i
-          .test(errorMessage);
-        if (serviceUnavailable) {
-          void NativeSpeechRecognition.stop().catch((stopError) => {
-            console.error("Could not stop the unavailable speech recognition service.", stopError);
-          });
-          failNativeRecognition(
-            new Error("화웨이 기본 음성 인식 서비스가 앱 연결을 거부했어요. 휴대폰 설정에서 다른 음성 인식 서비스(예: Google 음성 인식)를 선택하거나, 입력란을 누른 뒤 키보드의 마이크로 말해 주세요."),
-            "음성 인식 서비스를 시작하지 못했어요."
-          );
-        } else {
-          failNativeRecognition(error, "시스템 음성 인식을 시작하지 못했어요.");
-        }
-      } finally {
-        window.clearTimeout(startupTimeout);
-        if (listeningStateListener) {
-          try {
-            await listeningStateListener.remove();
-          } catch (error) {
-            console.error("Could not remove the native speech recognition listener.", error);
-          }
-        }
+        failNativeRecognition(error, "시스템 음성 인식을 시작하지 못했어요.");
       }
     }
 
